@@ -1,0 +1,157 @@
+{
+  "name": "Tool: Sprawdź Zamówienie",
+  "nodes": [
+    {
+      "parameters": {
+        "inputSource": "jsonExample",
+        "jsonExample": "{\n  \"order_number\": \"ZAM-2026-0015\",\n  \"email\": \"jan.kowalski@email.pl\"\n}"
+      },
+      "id": "workflow-input",
+      "name": "Workflow Input",
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [0, 0]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "has-order-number",
+              "leftValue": "={{ $json.order_number }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "check-input",
+      "name": "Has Order Number?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.1,
+      "position": [220, 0]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT \n  order_number,\n  customer_name,\n  email,\n  status,\n  items,\n  total,\n  shipping_method,\n  tracking_number,\n  carrier,\n  shipping_address,\n  created_at\nFROM orders \nWHERE order_number = '{{ $('Workflow Input').item.json.order_number }}'\nLIMIT 1",
+        "options": {}
+      },
+      "id": "query-by-order-number",
+      "name": "Query by Order Number",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [440, -100],
+      "credentials": {
+        "postgres": {
+          "id": "POSTGRES_CREDENTIAL_ID",
+          "name": "PostgreSQL Ecommerce"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT \n  order_number,\n  customer_name,\n  email,\n  status,\n  items,\n  total,\n  shipping_method,\n  tracking_number,\n  carrier,\n  shipping_address,\n  created_at\nFROM orders \nWHERE email = '{{ $('Workflow Input').item.json.email }}'\nORDER BY created_at DESC\nLIMIT 5",
+        "options": {}
+      },
+      "id": "query-by-email",
+      "name": "Query by Email",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [440, 100],
+      "credentials": {
+        "postgres": {
+          "id": "POSTGRES_CREDENTIAL_ID",
+          "name": "PostgreSQL Ecommerce"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const input = $('Workflow Input').item.json;\nconst orders = $input.all();\n\nif (!orders || orders.length === 0) {\n  return [{\n    json: {\n      found: false,\n      message: `Nie znaleziono zamówienia${input.order_number ? ' o numerze ' + input.order_number : ''}${input.email ? ' dla adresu email ' + input.email : ''}.`\n    }\n  }];\n}\n\nconst formatStatus = (status) => {\n  const statusMap = {\n    'new': 'Nowe - oczekuje na realizację',\n    'processing': 'W trakcie realizacji',\n    'shipped': 'Wysłane',\n    'delivered': 'Dostarczone',\n    'returned': 'Zwrócone'\n  };\n  return statusMap[status] || status;\n};\n\nconst formatOrder = (order) => {\n  let items = order.items;\n  if (typeof items === 'string') {\n    items = JSON.parse(items);\n  }\n  \n  const itemsList = items.map(item => \n    `- ${item.name} (${item.variant || ''}) x${item.quantity} - ${item.price} PLN`\n  ).join('\\n');\n  \n  return {\n    order_number: order.order_number,\n    customer_name: order.customer_name,\n    status: formatStatus(order.status),\n    status_raw: order.status,\n    items: itemsList,\n    total: `${order.total} PLN`,\n    shipping_method: order.shipping_method,\n    tracking_number: order.tracking_number || 'Brak (zamówienie jeszcze nie wysłane)',\n    carrier: order.carrier,\n    created_at: new Date(order.created_at).toLocaleDateString('pl-PL')\n  };\n};\n\nif (orders.length === 1) {\n  const order = formatOrder(orders[0].json);\n  return [{\n    json: {\n      found: true,\n      single_order: true,\n      ...order\n    }\n  }];\n} else {\n  const formattedOrders = orders.map(o => formatOrder(o.json));\n  return [{\n    json: {\n      found: true,\n      single_order: false,\n      orders_count: formattedOrders.length,\n      orders: formattedOrders.map(o => ({\n        order_number: o.order_number,\n        status: o.status,\n        total: o.total,\n        created_at: o.created_at\n      }))\n    }\n  }];\n}"
+      },
+      "id": "format-response",
+      "name": "Format Response",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [660, 0]
+    }
+  ],
+  "connections": {
+    "Workflow Input": {
+      "main": [
+        [
+          {
+            "node": "Has Order Number?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Has Order Number?": {
+      "main": [
+        [
+          {
+            "node": "Query by Order Number",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Query by Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Query by Order Number": {
+      "main": [
+        [
+          {
+            "node": "Format Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Query by Email": {
+      "main": [
+        [
+          {
+            "node": "Format Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [
+    {
+      "name": "tool"
+    },
+    {
+      "name": "customer-service"
+    }
+  ],
+  "pinData": {}
+}

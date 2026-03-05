@@ -1,0 +1,81 @@
+{
+  "name": "Tool: Informacje o Dostawie",
+  "nodes": [
+    {
+      "parameters": {
+        "inputSource": "jsonExample",
+        "jsonExample": "{\n  \"order_number\": \"ZAM-2026-0015\"\n}"
+      },
+      "id": "workflow-input",
+      "name": "Workflow Input",
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [0, 0]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT \n  order_number,\n  status,\n  shipping_method,\n  tracking_number,\n  carrier,\n  shipping_address,\n  created_at\nFROM orders \nWHERE order_number = '{{ $json.order_number }}'\nLIMIT 1",
+        "options": {}
+      },
+      "id": "get-order",
+      "name": "Get Order",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [220, 0],
+      "credentials": {
+        "postgres": {
+          "id": "POSTGRES_CREDENTIAL_ID",
+          "name": "PostgreSQL Ecommerce"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const input = $('Workflow Input').item.json;\nconst orders = $input.all();\n\nif (!orders || orders.length === 0) {\n  return [{\n    json: {\n      found: false,\n      message: `Nie znaleziono zamówienia o numerze ${input.order_number}.`\n    }\n  }];\n}\n\nconst order = orders[0].json;\n\n// Build tracking URL based on carrier\nconst getTrackingUrl = (carrier, trackingNumber) => {\n  if (!trackingNumber) return null;\n  \n  const urls = {\n    'InPost': `https://inpost.pl/sledzenie-przesylek?number=${trackingNumber}`,\n    'DPD': `https://tracktrace.dpd.com.pl/parcelDetails?typ=1&numer=${trackingNumber}`,\n    'DHL': `https://www.dhl.com/pl-pl/home/tracking/tracking-express.html?tracking-id=${trackingNumber}`,\n    'Poczta Polska': `https://emonitoring.poczta-polska.pl/?numer=${trackingNumber}`\n  };\n  \n  return urls[carrier] || null;\n};\n\n// Get status message based on order status\nconst getStatusMessage = (status, carrier) => {\n  const messages = {\n    'new': 'Zamówienie zostało przyjęte i oczekuje na realizację.',\n    'processing': 'Zamówienie jest w trakcie pakowania w naszym magazynie.',\n    'shipped': `Przesyłka została nadana przez kuriera ${carrier || 'kuriera'}. Możesz śledzić jej status.`,\n    'delivered': 'Przesyłka została dostarczona.',\n    'returned': 'Zamówienie zostało zwrócone.'\n  };\n  return messages[status] || 'Status nieznany.';\n};\n\n// Estimate delivery based on status\nconst getEstimatedDelivery = (status, carrier) => {\n  if (status === 'delivered') return 'Dostarczone';\n  if (status === 'returned') return 'Zwrócone';\n  if (status === 'new' || status === 'processing') return 'Szacowany czas: 2-4 dni robocze od wysyłki';\n  if (status === 'shipped') {\n    // For demo, estimate 1-2 days from now\n    const today = new Date();\n    const delivery = new Date(today);\n    delivery.setDate(delivery.getDate() + 2);\n    return `Szacowana dostawa: ${delivery.toLocaleDateString('pl-PL')}`;\n  }\n  return 'Nieznany';\n};\n\nlet shippingAddress = order.shipping_address;\nif (typeof shippingAddress === 'string') {\n  shippingAddress = JSON.parse(shippingAddress);\n}\n\nconst trackingUrl = getTrackingUrl(order.carrier, order.tracking_number);\n\nreturn [{\n  json: {\n    found: true,\n    order_number: order.order_number,\n    status: order.status,\n    status_message: getStatusMessage(order.status, order.carrier),\n    carrier: order.carrier,\n    shipping_method: order.shipping_method,\n    tracking_number: order.tracking_number || 'Brak - przesyłka jeszcze nie została nadana',\n    tracking_url: trackingUrl || 'Niedostępny - przesyłka jeszcze nie została nadana',\n    estimated_delivery: getEstimatedDelivery(order.status, order.carrier),\n    delivery_address: shippingAddress ? (\n      shippingAddress.paczkomat \n        ? `Paczkomat ${shippingAddress.paczkomat}, ${shippingAddress.city}`\n        : `${shippingAddress.street}, ${shippingAddress.postal_code} ${shippingAddress.city}`\n    ) : 'Nieznany'\n  }\n}];"
+      },
+      "id": "format-response",
+      "name": "Format Response",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [440, 0]
+    }
+  ],
+  "connections": {
+    "Workflow Input": {
+      "main": [
+        [
+          {
+            "node": "Get Order",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Order": {
+      "main": [
+        [
+          {
+            "node": "Format Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [
+    {
+      "name": "tool"
+    },
+    {
+      "name": "customer-service"
+    }
+  ],
+  "pinData": {}
+}

@@ -1,0 +1,118 @@
+{
+  "name": "API: Get Orders",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "GET",
+        "path": "orders",
+        "responseMode": "responseNode",
+        "options": {
+          "allowedOrigins": "*"
+        }
+      },
+      "id": "webhook",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [0, 0],
+      "webhookId": "orders-api"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT id, order_number, customer_name, email, status, items, total, shipping_method, tracking_number, carrier, shipping_address, created_at, updated_at FROM orders ORDER BY created_at DESC LIMIT 100",
+        "options": {}
+      },
+      "id": "query-orders",
+      "name": "Query Orders",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [220, 0],
+      "credentials": {
+        "postgres": {
+          "id": "POSTGRES_CREDENTIAL_ID",
+          "name": "PostgreSQL Ecommerce"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const orders = $input.all();\n\nconst statusLabels = {\n  'new': 'Nowe',\n  'processing': 'W realizacji',\n  'shipped': 'Wysłane',\n  'delivered': 'Dostarczone',\n  'returned': 'Zwrócone'\n};\n\nconst formattedOrders = orders.map(o => {\n  let items = o.json.items;\n  if (typeof items === 'string') {\n    try {\n      items = JSON.parse(items);\n    } catch (e) {\n      items = [];\n    }\n  }\n  \n  let shippingAddress = o.json.shipping_address;\n  if (typeof shippingAddress === 'string') {\n    try {\n      shippingAddress = JSON.parse(shippingAddress);\n    } catch (e) {\n      shippingAddress = null;\n    }\n  }\n  \n  return {\n    id: o.json.id,\n    order_number: o.json.order_number,\n    customer_name: o.json.customer_name,\n    email: o.json.email,\n    status: o.json.status,\n    status_label: statusLabels[o.json.status] || o.json.status,\n    items: items,\n    items_count: items ? items.length : 0,\n    total: parseFloat(o.json.total),\n    shipping_method: o.json.shipping_method,\n    tracking_number: o.json.tracking_number,\n    carrier: o.json.carrier,\n    shipping_address: shippingAddress,\n    created_at: o.json.created_at,\n    updated_at: o.json.updated_at\n  };\n});\n\nreturn [{\n  json: {\n    orders: formattedOrders,\n    total: formattedOrders.length\n  }\n}];"
+      },
+      "id": "format-response",
+      "name": "Format Response",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [440, 0]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json }}",
+        "options": {
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Access-Control-Allow-Origin",
+                "value": "*"
+              }
+            ]
+          }
+        }
+      },
+      "id": "respond",
+      "name": "Respond to Webhook",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [660, 0]
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Query Orders",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Query Orders": {
+      "main": [
+        [
+          {
+            "node": "Format Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format Response": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [
+    {
+      "name": "api"
+    },
+    {
+      "name": "orders"
+    }
+  ],
+  "pinData": {}
+}

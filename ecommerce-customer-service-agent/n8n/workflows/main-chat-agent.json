@@ -1,0 +1,378 @@
+{
+  "name": "E-commerce Customer Service Agent",
+  "nodes": [
+    {
+      "parameters": {
+        "path": "chat",
+        "httpMethod": "POST",
+        "responseMode": "responseNode",
+        "options": {
+          "allowedOrigins": "*"
+        }
+      },
+      "id": "webhook",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [0, 0],
+      "webhookId": "chat"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "INSERT INTO chat_sessions (id, status, created_at) VALUES ('{{ $json.body.sessionId }}', 'active', NOW()) ON CONFLICT (id) DO NOTHING",
+        "options": {}
+      },
+      "id": "ensure-session",
+      "name": "Ensure Session Exists",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [220, 0],
+      "credentials": {
+        "postgres": {
+          "id": "POSTGRES_CREDENTIAL_ID",
+          "name": "PostgreSQL Ecommerce"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT role, content FROM chat_messages WHERE session_id = '{{ $('Webhook').item.json.body.sessionId }}' ORDER BY created_at ASC LIMIT 20",
+        "options": {}
+      },
+      "id": "load-history",
+      "name": "Load Chat History",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [440, 0],
+      "credentials": {
+        "postgres": {
+          "id": "POSTGRES_CREDENTIAL_ID",
+          "name": "PostgreSQL Ecommerce"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const webhook = $('Webhook').item.json;\nconst historyRows = $input.all();\n\n// Format chat history for the prompt\nlet historyText = '';\nif (historyRows && historyRows.length > 0) {\n  const messages = historyRows.map(row => {\n    const role = row.json.role === 'user' ? 'Klient' : 'Asystent';\n    return `${role}: ${row.json.content}`;\n  });\n  historyText = '\\n\\nHISTORIA ROZMOWY:\\n' + messages.join('\\n') + '\\n\\n';\n}\n\n// Current message from user\nconst currentMessage = webhook.body.message;\nconst sessionId = webhook.body.sessionId;\n\nreturn [{\n  json: {\n    sessionId: sessionId,\n    currentMessage: currentMessage,\n    historyText: historyText,\n    fullPrompt: historyText + 'Klient: ' + currentMessage\n  }\n}];"
+      },
+      "id": "format-history",
+      "name": "Format History",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [660, 0]
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.fullPrompt }}",
+        "options": {
+          "systemMessage": "Jesteś asystentem obsługi klienta sklepu Demo Sklep.\n\nZASADY:\n- Odpowiadaj po polsku, uprzejmie i konkretnie\n- Nigdy nie wymyślaj informacji — jeśli nie wiesz, powiedz to\n- Nie dawaj rabatów ani nie obiecuj terminów dostawy których nie możesz potwierdzić\n- Jeśli klient jest wściekły lub sprawa jest skomplikowana — eskaluj do człowieka\n- Zawsze pytaj o numer zamówienia jeśli klient go nie podał a pyta o zamówienie\n- Numery zamówień mają format ZAM-YYYY-XXXX (np. ZAM-2026-0015)\n\nPOLITYKA SKLEPU:\n- Zwroty: 14 dni od otrzymania przesyłki\n- Darmowa dostawa od 200 zł\n- Czas realizacji: 1-3 dni robocze\n- Reklamacje: rozpatrywane do 14 dni\n- Metody płatności: BLIK, przelew, karta, za pobraniem\n\nDOSTĘPNE NARZĘDZIA:\n- sprawdz_zamowienie: użyj gdy klient pyta o status zamówienia\n- sprawdz_dostepnosc: użyj gdy klient pyta o dostępność produktu\n- informacje_o_dostawie: użyj gdy klient pyta o tracking/gdzie jest paczka\n- utworz_zgloszenie_zwrotu: użyj gdy klient chce zwrócić produkt\n- eskaluj_do_czlowieka: użyj gdy musisz przekazać sprawę do konsultanta\n\nESKALACJA DO CZŁOWIEKA gdy:\n- Klient wyraźnie prosi o kontakt z człowiekiem\n- Reklamacja dotycząca uszkodzonego towaru\n- Klient jest agresywny lub grozi\n- Problem którego nie potrafisz rozwiązać\n- Klient chce anulować zamówienie które jest już wysłane\n\nJeśli w prompcie jest HISTORIA ROZMOWY, weź ją pod uwagę przy odpowiedzi. Odpowiadaj tylko na ostatnią wiadomość klienta, ale z kontekstem poprzednich.\n\nPamiętaj: bądź pomocny, konkretny i profesjonalny. Jeśli używasz narzędzia, przekaż klientowi wynik w przyjazny sposób."
+        }
+      },
+      "id": "ai-agent",
+      "name": "AI Agent",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.7,
+      "position": [880, 0]
+    },
+    {
+      "parameters": {
+        "model": "claude-3-5-sonnet-20241022",
+        "options": {
+          "temperature": 0.7,
+          "maxTokensToSample": 1024
+        }
+      },
+      "id": "anthropic-model",
+      "name": "Anthropic Claude",
+      "type": "@n8n/n8n-nodes-langchain.lmChatAnthropic",
+      "typeVersion": 1.2,
+      "position": [880, 200],
+      "credentials": {
+        "anthropicApi": {
+          "id": "ANTHROPIC_CREDENTIAL_ID",
+          "name": "Anthropic API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "name": "sprawdz_zamowienie",
+        "description": "Sprawdza status zamówienia po numerze zamówienia lub adresie email klienta. Użyj gdy klient pyta o swoje zamówienie, gdzie jest paczka, lub chce sprawdzić co zamawiał.",
+        "workflowId": {
+          "__rl": true,
+          "value": "WORKFLOW_ID_SPRAWDZ_ZAMOWIENIE",
+          "mode": "id"
+        },
+        "specifyInputSchema": true,
+        "jsonSchemaExample": "{\n  \"order_number\": \"ZAM-2026-0015\",\n  \"email\": \"jan.kowalski@email.pl\"\n}"
+      },
+      "id": "tool-sprawdz-zamowienie",
+      "name": "Tool: Sprawdź Zamówienie",
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 1.2,
+      "position": [1000, 200]
+    },
+    {
+      "parameters": {
+        "name": "sprawdz_dostepnosc",
+        "description": "Sprawdza czy produkt jest dostępny i w jakich wariantach (rozmiar, kolor). Użyj gdy klient pyta o dostępność produktu lub czy macie coś w magazynie.",
+        "workflowId": {
+          "__rl": true,
+          "value": "WORKFLOW_ID_SPRAWDZ_DOSTEPNOSC",
+          "mode": "id"
+        },
+        "specifyInputSchema": true,
+        "jsonSchemaExample": "{\n  \"product_name\": \"koszulka basic\",\n  \"variant\": \"XL czarna\"\n}"
+      },
+      "id": "tool-sprawdz-dostepnosc",
+      "name": "Tool: Sprawdź Dostępność",
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 1.2,
+      "position": [1120, 200]
+    },
+    {
+      "parameters": {
+        "name": "informacje_o_dostawie",
+        "description": "Pobiera szczegóły dostawy i link do śledzenia przesyłki. Użyj gdy klient pyta gdzie jest paczka, chce śledzić przesyłkę, lub pyta o tracking.",
+        "workflowId": {
+          "__rl": true,
+          "value": "WORKFLOW_ID_INFORMACJE_O_DOSTAWIE",
+          "mode": "id"
+        },
+        "specifyInputSchema": true,
+        "jsonSchemaExample": "{\n  \"order_number\": \"ZAM-2026-0015\"\n}"
+      },
+      "id": "tool-informacje-o-dostawie",
+      "name": "Tool: Informacje o Dostawie",
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 1.2,
+      "position": [1240, 200]
+    },
+    {
+      "parameters": {
+        "name": "utworz_zgloszenie_zwrotu",
+        "description": "Tworzy zgłoszenie zwrotu towaru. Używaj TYLKO gdy klient wyraźnie chce zwrócić produkt i podał numer zamówienia. Nie używaj jeśli klient tylko pyta o politykę zwrotów.",
+        "workflowId": {
+          "__rl": true,
+          "value": "WORKFLOW_ID_UTWORZ_ZGLOSZENIE_ZWROTU",
+          "mode": "id"
+        },
+        "specifyInputSchema": true,
+        "jsonSchemaExample": "{\n  \"order_number\": \"ZAM-2026-0015\",\n  \"reason\": \"Rozmiar nie pasuje\",\n  \"items\": [\"Koszulka Basic XL czarna\"]\n}"
+      },
+      "id": "tool-utworz-zgloszenie-zwrotu",
+      "name": "Tool: Utwórz Zgłoszenie Zwrotu",
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 1.2,
+      "position": [1360, 200]
+    },
+    {
+      "parameters": {
+        "name": "eskaluj_do_czlowieka",
+        "description": "Przekazuje rozmowę do konsultanta. Używaj gdy: klient prosi o kontakt z człowiekiem, jest agresywny, zgłasza uszkodzony towar, lub masz problem którego nie możesz rozwiązać.",
+        "workflowId": {
+          "__rl": true,
+          "value": "WORKFLOW_ID_ESKALUJ_DO_CZLOWIEKA",
+          "mode": "id"
+        },
+        "specifyInputSchema": true,
+        "jsonSchemaExample": "{\n  \"reason\": \"Klient zgłasza uszkodzony towar\",\n  \"summary\": \"Klient otrzymał koszulkę z plamą, chce reklamację\",\n  \"priority\": \"high\"\n}"
+      },
+      "id": "tool-eskaluj-do-czlowieka",
+      "name": "Tool: Eskaluj do Człowieka",
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 1.2,
+      "position": [1480, 200]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "INSERT INTO chat_messages (session_id, role, content, created_at) VALUES \n('{{ $('Format History').item.json.sessionId }}', 'user', '{{ $('Format History').item.json.currentMessage.replace(/'/g, \"''\") }}', NOW()),\n('{{ $('Format History').item.json.sessionId }}', 'assistant', '{{ $('AI Agent').item.json.output.replace(/'/g, \"''\") }}', NOW())",
+        "options": {}
+      },
+      "id": "save-messages",
+      "name": "Save Messages",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [1100, 0],
+      "credentials": {
+        "postgres": {
+          "id": "POSTGRES_CREDENTIAL_ID",
+          "name": "PostgreSQL Ecommerce"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { \"output\": $('AI Agent').item.json.output } }}",
+        "options": {
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Access-Control-Allow-Origin",
+                "value": "*"
+              }
+            ]
+          }
+        }
+      },
+      "id": "respond",
+      "name": "Respond to Webhook",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [1320, 0]
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Ensure Session Exists",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ensure Session Exists": {
+      "main": [
+        [
+          {
+            "node": "Load Chat History",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Load Chat History": {
+      "main": [
+        [
+          {
+            "node": "Format History",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format History": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Save Messages",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Save Messages": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Anthropic Claude": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tool: Sprawdź Zamówienie": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tool: Sprawdź Dostępność": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tool: Informacje o Dostawie": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tool: Utwórz Zgłoszenie Zwrotu": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tool: Eskaluj do Człowieka": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [
+    {
+      "name": "customer-service"
+    },
+    {
+      "name": "ai-agent"
+    }
+  ],
+  "triggerCount": 1,
+  "pinData": {}
+}

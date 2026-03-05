@@ -1,0 +1,102 @@
+{
+  "name": "Tool: Eskaluj do Człowieka",
+  "nodes": [
+    {
+      "parameters": {
+        "inputSource": "jsonExample",
+        "jsonExample": "{\n  \"reason\": \"Klient zgłasza uszkodzony towar\",\n  \"summary\": \"Klient otrzymał koszulkę z plamą, chce reklamację\",\n  \"priority\": \"high\",\n  \"session_id\": \"abc123\"\n}"
+      },
+      "id": "workflow-input",
+      "name": "Workflow Input",
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [0, 0]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "UPDATE chat_sessions \nSET \n  status = 'escalated',\n  escalated_at = NOW(),\n  escalation_reason = '{{ $json.reason }}',\n  updated_at = NOW()\nWHERE id = '{{ $json.session_id }}'\nRETURNING id, status, escalated_at",
+        "options": {}
+      },
+      "id": "update-session",
+      "name": "Update Session Status",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [220, 0],
+      "credentials": {
+        "postgres": {
+          "id": "POSTGRES_CREDENTIAL_ID",
+          "name": "PostgreSQL Ecommerce"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const input = $('Workflow Input').item.json;\n\n// Priority emoji mapping\nconst priorityEmoji = {\n  'high': '🔴',\n  'medium': '🟡',\n  'low': '🟢'\n};\n\nconst emoji = priorityEmoji[input.priority] || '🟡';\nconst priorityText = {\n  'high': 'WYSOKI',\n  'medium': 'ŚREDNI',\n  'low': 'NISKI'\n}[input.priority] || 'ŚREDNI';\n\nconst timestamp = new Date().toLocaleString('pl-PL', {\n  dateStyle: 'short',\n  timeStyle: 'short'\n});\n\nconst slackMessage = {\n  text: `${emoji} *Eskalacja z czatu AI*`,\n  blocks: [\n    {\n      type: 'header',\n      text: {\n        type: 'plain_text',\n        text: `${emoji} Eskalacja z czatu AI`,\n        emoji: true\n      }\n    },\n    {\n      type: 'section',\n      fields: [\n        {\n          type: 'mrkdwn',\n          text: `*Priorytet:*\\n${priorityText}`\n        },\n        {\n          type: 'mrkdwn',\n          text: `*Sesja:*\\n${input.session_id || 'Nieznana'}`\n        }\n      ]\n    },\n    {\n      type: 'section',\n      text: {\n        type: 'mrkdwn',\n        text: `*Powód eskalacji:*\\n${input.reason}`\n      }\n    },\n    {\n      type: 'section',\n      text: {\n        type: 'mrkdwn',\n        text: `*Podsumowanie rozmowy:*\\n${input.summary}`\n      }\n    },\n    {\n      type: 'context',\n      elements: [\n        {\n          type: 'mrkdwn',\n          text: `Czas: ${timestamp}`\n        }\n      ]\n    },\n    {\n      type: 'divider'\n    }\n  ]\n};\n\n// Response time based on priority\nconst responseTime = {\n  'high': '30 minut',\n  'medium': '2 godzin',\n  'low': '4 godzin'\n}[input.priority] || '2 godzin';\n\nreturn [{\n  json: {\n    slack_message: slackMessage,\n    escalated: true,\n    priority: input.priority,\n    reason: input.reason,\n    response_time: responseTime,\n    session_id: input.session_id\n  }\n}];"
+      },
+      "id": "prepare-notification",
+      "name": "Prepare Notification",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [440, 0]
+    },
+    {
+      "parameters": {
+        "jsCode": "// In production, this would be replaced with actual Slack node\n// For demo purposes, we just log the notification\n\nconst input = $input.item.json;\n\nconsole.log('=== SLACK NOTIFICATION ===');\nconsole.log(JSON.stringify(input.slack_message, null, 2));\nconsole.log('========================');\n\n// Return success response for the agent\nreturn [{\n  json: {\n    escalated: true,\n    success: true,\n    message: `Przekazałem Twoją sprawę do naszego zespołu obsługi klienta. Konsultant skontaktuje się z Tobą w ciągu ${input.response_time}. Dziękuję za cierpliwość.`,\n    priority: input.priority,\n    estimated_response: input.response_time,\n    session_id: input.session_id,\n    notification_sent: true\n  }\n}];"
+      },
+      "id": "send-notification",
+      "name": "Send Notification (Demo)",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [660, 0]
+    }
+  ],
+  "connections": {
+    "Workflow Input": {
+      "main": [
+        [
+          {
+            "node": "Update Session Status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Session Status": {
+      "main": [
+        [
+          {
+            "node": "Prepare Notification",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Notification": {
+      "main": [
+        [
+          {
+            "node": "Send Notification (Demo)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [
+    {
+      "name": "tool"
+    },
+    {
+      "name": "customer-service"
+    }
+  ],
+  "pinData": {}
+}

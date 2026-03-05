@@ -1,0 +1,118 @@
+{
+  "name": "API: Get Stats",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "GET",
+        "path": "stats",
+        "responseMode": "responseNode",
+        "options": {
+          "allowedOrigins": "*"
+        }
+      },
+      "id": "webhook",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [0, 0],
+      "webhookId": "stats-api"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT (SELECT COUNT(*) FROM orders) as total_orders, (SELECT COUNT(*) FROM orders WHERE status = 'new') as new_orders, (SELECT COUNT(*) FROM orders WHERE status = 'processing') as processing_orders, (SELECT COUNT(*) FROM orders WHERE status = 'shipped') as shipped_orders, (SELECT COUNT(*) FROM orders WHERE status = 'delivered') as delivered_orders, (SELECT COUNT(*) FROM orders WHERE status = 'returned') as returned_orders, (SELECT COUNT(*) FROM products) as total_products, (SELECT COUNT(*) FROM returns) as total_returns, (SELECT COALESCE(SUM(total), 0) FROM orders WHERE status NOT IN ('returned')) as total_revenue",
+        "options": {}
+      },
+      "id": "query-stats",
+      "name": "Query Stats",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [220, 0],
+      "credentials": {
+        "postgres": {
+          "id": "POSTGRES_CREDENTIAL_ID",
+          "name": "PostgreSQL Ecommerce"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const stats = $input.first().json;\n\nreturn [{\n  json: {\n    orders: {\n      total: parseInt(stats.total_orders) || 0,\n      new: parseInt(stats.new_orders) || 0,\n      processing: parseInt(stats.processing_orders) || 0,\n      shipped: parseInt(stats.shipped_orders) || 0,\n      delivered: parseInt(stats.delivered_orders) || 0,\n      returned: parseInt(stats.returned_orders) || 0\n    },\n    products: {\n      total: parseInt(stats.total_products) || 0\n    },\n    returns: {\n      total: parseInt(stats.total_returns) || 0\n    },\n    revenue: {\n      total: parseFloat(stats.total_revenue) || 0\n    }\n  }\n}];"
+      },
+      "id": "format-response",
+      "name": "Format Response",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [440, 0]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json }}",
+        "options": {
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Access-Control-Allow-Origin",
+                "value": "*"
+              }
+            ]
+          }
+        }
+      },
+      "id": "respond",
+      "name": "Respond to Webhook",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [660, 0]
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Query Stats",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Query Stats": {
+      "main": [
+        [
+          {
+            "node": "Format Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format Response": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [
+    {
+      "name": "api"
+    },
+    {
+      "name": "stats"
+    }
+  ],
+  "pinData": {}
+}

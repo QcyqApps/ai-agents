@@ -1,0 +1,118 @@
+{
+  "name": "API: Get Returns",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "GET",
+        "path": "returns",
+        "responseMode": "responseNode",
+        "options": {
+          "allowedOrigins": "*"
+        }
+      },
+      "id": "webhook",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [0, 0],
+      "webhookId": "returns-api"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT r.id, r.order_id, o.order_number, o.customer_name, o.email, r.reason, r.items, r.status, r.created_at, r.updated_at FROM returns r LEFT JOIN orders o ON r.order_id = o.id ORDER BY r.created_at DESC LIMIT 100",
+        "options": {}
+      },
+      "id": "query-returns",
+      "name": "Query Returns",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [220, 0],
+      "credentials": {
+        "postgres": {
+          "id": "POSTGRES_CREDENTIAL_ID",
+          "name": "PostgreSQL Ecommerce"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const returns = $input.all();\n\nconst statusLabels = {\n  'created': 'Utworzone',\n  'received': 'Otrzymane',\n  'refunded': 'Zwrócono środki',\n  'rejected': 'Odrzucone'\n};\n\nconst formattedReturns = returns.map(r => {\n  let items = r.json.items;\n  if (typeof items === 'string') {\n    try {\n      items = JSON.parse(items);\n    } catch (e) {\n      items = [];\n    }\n  }\n  \n  return {\n    id: r.json.id,\n    order_id: r.json.order_id,\n    order_number: r.json.order_number,\n    customer_name: r.json.customer_name,\n    email: r.json.email,\n    reason: r.json.reason,\n    items: items,\n    status: r.json.status,\n    status_label: statusLabels[r.json.status] || r.json.status,\n    created_at: r.json.created_at,\n    updated_at: r.json.updated_at\n  };\n});\n\nreturn [{\n  json: {\n    returns: formattedReturns,\n    total: formattedReturns.length\n  }\n}];"
+      },
+      "id": "format-response",
+      "name": "Format Response",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [440, 0]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json }}",
+        "options": {
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Access-Control-Allow-Origin",
+                "value": "*"
+              }
+            ]
+          }
+        }
+      },
+      "id": "respond",
+      "name": "Respond to Webhook",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [660, 0]
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Query Returns",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Query Returns": {
+      "main": [
+        [
+          {
+            "node": "Format Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format Response": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [
+    {
+      "name": "api"
+    },
+    {
+      "name": "returns"
+    }
+  ],
+  "pinData": {}
+}

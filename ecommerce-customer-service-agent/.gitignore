@@ -1,0 +1,25 @@
+# Environment files
+.env
+.env.local
+
+# Docker volumes (if stored locally)
+postgres_data/
+n8n_data/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Temporary files
+tmp/
+temp/

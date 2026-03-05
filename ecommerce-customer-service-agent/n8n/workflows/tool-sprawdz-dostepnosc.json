@@ -1,0 +1,81 @@
+{
+  "name": "Tool: Sprawdź Dostępność",
+  "nodes": [
+    {
+      "parameters": {
+        "inputSource": "jsonExample",
+        "jsonExample": "{\n  \"product_name\": \"koszulka basic\",\n  \"variant\": \"XL czarna\"\n}"
+      },
+      "id": "workflow-input",
+      "name": "Workflow Input",
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [0, 0]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT \n  id,\n  sku,\n  name,\n  description,\n  price,\n  category,\n  variants,\n  url\nFROM products \nWHERE \n  LOWER(name) LIKE LOWER('%{{ $json.product_name }}%')\n  OR to_tsvector('simple', name) @@ plainto_tsquery('simple', '{{ $json.product_name }}')\nLIMIT 5",
+        "options": {}
+      },
+      "id": "search-products",
+      "name": "Search Products",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [220, 0],
+      "credentials": {
+        "postgres": {
+          "id": "POSTGRES_CREDENTIAL_ID",
+          "name": "PostgreSQL Ecommerce"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const input = $('Workflow Input').item.json;\nconst products = $input.all();\nconst requestedVariant = (input.variant || '').toLowerCase();\n\nif (!products || products.length === 0) {\n  return [{\n    json: {\n      found: false,\n      message: `Nie znaleziono produktów pasujących do \"${input.product_name}\".`\n    }\n  }];\n}\n\nconst formatProduct = (product) => {\n  let variants = product.variants;\n  if (typeof variants === 'string') {\n    variants = JSON.parse(variants);\n  }\n  \n  // Filter variants by stock and optionally by requested variant\n  let availableVariants = variants.filter(v => v.stock > 0);\n  \n  if (requestedVariant) {\n    // Check if requested variant matches any available variant\n    const matchingVariants = availableVariants.filter(v => {\n      const variantStr = `${v.size} ${v.color}`.toLowerCase();\n      return variantStr.includes(requestedVariant) || \n             requestedVariant.includes(v.size?.toLowerCase() || '') ||\n             requestedVariant.includes(v.color?.toLowerCase() || '');\n    });\n    \n    if (matchingVariants.length > 0) {\n      availableVariants = matchingVariants;\n    }\n  }\n  \n  const variantsList = availableVariants.map(v => \n    `- ${v.size || ''} ${v.color || ''}: ${v.stock} szt. w magazynie`\n  ).join('\\n');\n  \n  const unavailableVariants = variants.filter(v => v.stock === 0);\n  const unavailableList = unavailableVariants.length > 0 \n    ? unavailableVariants.map(v => `- ${v.size || ''} ${v.color || ''}`).join('\\n')\n    : null;\n  \n  return {\n    name: product.name,\n    sku: product.sku,\n    price: `${product.price} PLN`,\n    category: product.category,\n    description: product.description,\n    url: product.url,\n    available_variants: variantsList || 'Brak dostępnych wariantów',\n    unavailable_variants: unavailableList,\n    total_available_variants: availableVariants.length,\n    is_available: availableVariants.length > 0\n  };\n};\n\nconst formattedProducts = products.map(p => formatProduct(p.json));\n\nif (formattedProducts.length === 1) {\n  const product = formattedProducts[0];\n  return [{\n    json: {\n      found: true,\n      single_product: true,\n      ...product,\n      message: product.is_available \n        ? `Produkt \"${product.name}\" jest dostępny.`\n        : `Produkt \"${product.name}\" jest obecnie niedostępny.`\n    }\n  }];\n} else {\n  return [{\n    json: {\n      found: true,\n      single_product: false,\n      products_count: formattedProducts.length,\n      products: formattedProducts.map(p => ({\n        name: p.name,\n        price: p.price,\n        is_available: p.is_available,\n        url: p.url\n      })),\n      message: `Znaleziono ${formattedProducts.length} produktów pasujących do \"${input.product_name}\".`\n    }\n  }];\n}"
+      },
+      "id": "format-response",
+      "name": "Format Response",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [440, 0]
+    }
+  ],
+  "connections": {
+    "Workflow Input": {
+      "main": [
+        [
+          {
+            "node": "Search Products",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search Products": {
+      "main": [
+        [
+          {
+            "node": "Format Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [
+    {
+      "name": "tool"
+    },
+    {
+      "name": "customer-service"
+    }
+  ],
+  "pinData": {}
+}

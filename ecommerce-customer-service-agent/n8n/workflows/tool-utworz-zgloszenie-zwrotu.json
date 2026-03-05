@@ -1,0 +1,188 @@
+{
+  "name": "Tool: Utwórz Zgłoszenie Zwrotu",
+  "nodes": [
+    {
+      "parameters": {
+        "inputSource": "jsonExample",
+        "jsonExample": "{\n  \"order_number\": \"ZAM-2026-0015\",\n  \"reason\": \"Rozmiar nie pasuje\",\n  \"items\": [\"Koszulka Basic XL czarna\"]\n}"
+      },
+      "id": "workflow-input",
+      "name": "Workflow Input",
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [0, 0]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT \n  id,\n  order_number,\n  status,\n  items,\n  total,\n  created_at,\n  (NOW() - created_at) AS age\nFROM orders \nWHERE order_number = '{{ $json.order_number }}'\nLIMIT 1",
+        "options": {}
+      },
+      "id": "get-order",
+      "name": "Get Order",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [220, 0],
+      "credentials": {
+        "postgres": {
+          "id": "POSTGRES_CREDENTIAL_ID",
+          "name": "PostgreSQL Ecommerce"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const input = $('Workflow Input').item.json;\nconst orders = $input.all();\n\nif (!orders || orders.length === 0) {\n  return [{\n    json: {\n      success: false,\n      eligible: false,\n      error: 'order_not_found',\n      message: `Nie znaleziono zamówienia o numerze ${input.order_number}. Proszę sprawdzić numer zamówienia.`\n    }\n  }];\n}\n\nconst order = orders[0].json;\n\n// Check if order status allows returns\nconst returnableStatuses = ['shipped', 'delivered'];\nif (!returnableStatuses.includes(order.status)) {\n  let message = '';\n  if (order.status === 'new' || order.status === 'processing') {\n    message = 'Zamówienie nie zostało jeszcze wysłane. Jeśli chcesz je anulować, skontaktuj się z nami bezpośrednio.';\n  } else if (order.status === 'returned') {\n    message = 'To zamówienie zostało już zwrócone.';\n  } else {\n    message = `Zamówienie w statusie \"${order.status}\" nie kwalifikuje się do zwrotu online.`;\n  }\n  \n  return [{\n    json: {\n      success: false,\n      eligible: false,\n      error: 'invalid_status',\n      order_status: order.status,\n      message: message\n    }\n  }];\n}\n\n// Check 14-day return window\nconst orderDate = new Date(order.created_at);\nconst now = new Date();\nconst daysDiff = Math.floor((now - orderDate) / (1000 * 60 * 60 * 24));\n\nif (daysDiff > 14) {\n  return [{\n    json: {\n      success: false,\n      eligible: false,\n      error: 'return_period_expired',\n      days_since_order: daysDiff,\n      message: `Niestety, upłynął 14-dniowy termin na zwrot (zamówienie złożone ${daysDiff} dni temu). Jeśli uważasz, że jest to błąd lub masz szczególne okoliczności, skontaktuj się z nami bezpośrednio.`\n    }\n  }];\n}\n\n// Check for existing return\nreturn [{\n  json: {\n    success: true,\n    eligible: true,\n    order_id: order.id,\n    order_number: order.order_number,\n    reason: input.reason,\n    items: input.items || [],\n    days_remaining: 14 - daysDiff\n  }\n}];"
+      },
+      "id": "validate-return",
+      "name": "Validate Return",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [440, 0]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "is-eligible",
+              "leftValue": "={{ $json.eligible }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "check-eligible",
+      "name": "Is Eligible?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.1,
+      "position": [660, 0]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "INSERT INTO returns (id, order_id, reason, items, status, created_at)\nVALUES (\n  (SELECT 'RET-' || TO_CHAR(NOW(), 'YYYY') || '-' || LPAD((COALESCE(MAX(CAST(SUBSTRING(id FROM 10 FOR 4) AS INTEGER)), 0) + 1)::TEXT, 4, '0') FROM returns WHERE id LIKE 'RET-' || TO_CHAR(NOW(), 'YYYY') || '-%'),\n  {{ $json.order_id }},\n  '{{ $json.reason }}',\n  '{{ JSON.stringify($json.items) }}'::jsonb,\n  'created',\n  NOW()\n)\nRETURNING id",
+        "options": {}
+      },
+      "id": "create-return",
+      "name": "Create Return",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [880, -100],
+      "credentials": {
+        "postgres": {
+          "id": "POSTGRES_CREDENTIAL_ID",
+          "name": "PostgreSQL Ecommerce"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const validation = $('Validate Return').item.json;\nconst returnResult = $input.all();\n\nif (!returnResult || returnResult.length === 0) {\n  return [{\n    json: {\n      success: false,\n      message: 'Wystąpił błąd podczas tworzenia zgłoszenia zwrotu. Proszę spróbować ponownie lub skontaktować się z obsługą klienta.'\n    }\n  }];\n}\n\nconst returnId = returnResult[0].json.id;\n\nreturn [{\n  json: {\n    success: true,\n    return_id: returnId,\n    order_number: validation.order_number,\n    reason: validation.reason,\n    status: 'created',\n    instructions: `Zgłoszenie zwrotu ${returnId} zostało utworzone pomyślnie.\\n\\nInstrukcje:\\n1. Zapakuj produkt w oryginalne opakowanie (jeśli możliwe)\\n2. Dołącz do paczki numer zwrotu: ${returnId}\\n3. Wyślij paczkę na adres:\\n   Magazyn Demo Sklep\\n   ul. Magazynowa 10\\n   00-001 Warszawa\\n\\nZwrot środków nastąpi w ciągu 7 dni roboczych od otrzymania przesyłki.`,\n    refund_info: 'Zwrot środków na konto w ciągu 7 dni roboczych od otrzymania paczki w magazynie.',\n    message: `Utworzono zgłoszenie zwrotu o numerze ${returnId}. Szczegółowe instrukcje zostały przygotowane.`\n  }\n}];"
+      },
+      "id": "format-success",
+      "name": "Format Success",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1100, -100]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Return the validation error message as-is\nreturn [$input.item];"
+      },
+      "id": "return-error",
+      "name": "Return Error",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [880, 100]
+    }
+  ],
+  "connections": {
+    "Workflow Input": {
+      "main": [
+        [
+          {
+            "node": "Get Order",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Order": {
+      "main": [
+        [
+          {
+            "node": "Validate Return",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validate Return": {
+      "main": [
+        [
+          {
+            "node": "Is Eligible?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Is Eligible?": {
+      "main": [
+        [
+          {
+            "node": "Create Return",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Return Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Return": {
+      "main": [
+        [
+          {
+            "node": "Format Success",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [
+    {
+      "name": "tool"
+    },
+    {
+      "name": "customer-service"
+    }
+  ],
+  "pinData": {}
+}

@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demo Sklep - Panel Administratora</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="page-wrapper">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <a href="admin.html" class="logo">
+                    <div class="logo-icon">A</div>
+                    <span>Admin <span class="logo-accent">Panel</span></span>
+                </a>
+                <nav class="nav">
+                    <a href="shop.html" class="nav-link">Sklep</a>
+                    <a href="admin.html" class="nav-link active">Panel Admin</a>
+                </nav>
+            </div>
+        </header>
+
+        <!-- Main Container -->
+        <div class="page-container">
+            <!-- Main Content -->
+            <main class="main-content">
+                <!-- Stats Cards -->
+                <section class="stats-grid" id="statsGrid">
+                    <div class="stat-card">
+                        <div class="stat-icon orders">📦</div>
+                        <div class="stat-content">
+                            <div class="stat-value" id="stat-orders">-</div>
+                            <div class="stat-label">Zamówienia</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon products">🏷️</div>
+                        <div class="stat-content">
+                            <div class="stat-value" id="stat-products">-</div>
+                            <div class="stat-label">Produkty</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon returns">↩️</div>
+                        <div class="stat-content">
+                            <div class="stat-value" id="stat-returns">-</div>
+                            <div class="stat-label">Zwroty</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon revenue">💰</div>
+                        <div class="stat-content">
+                            <div class="stat-value" id="stat-revenue">-</div>
+                            <div class="stat-label">Przychód (PLN)</div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Tabs -->
+                <div class="tabs-container">
+                    <div class="tabs">
+                        <button class="tab-btn active" data-tab="orders">Zamówienia</button>
+                        <button class="tab-btn" data-tab="products">Produkty</button>
+                        <button class="tab-btn" data-tab="returns">Zwroty</button>
+                    </div>
+
+                    <!-- Orders Tab -->
+                    <div class="tab-content active" id="tab-orders">
+                        <div class="table-controls">
+                            <input type="text" class="search-input" id="ordersSearch" placeholder="Szukaj po numerze lub kliencie...">
+                            <select class="filter-select" id="ordersStatusFilter">
+                                <option value="">Wszystkie statusy</option>
+                                <option value="new">Nowe</option>
+                                <option value="processing">W realizacji</option>
+                                <option value="shipped">Wysłane</option>
+                                <option value="delivered">Dostarczone</option>
+                                <option value="returned">Zwrócone</option>
+                            </select>
+                        </div>
+                        <div class="table-wrapper">
+                            <table class="data-table" id="ordersTable">
+                                <thead>
+                                    <tr>
+                                        <th data-sort="order_number">Nr zamówienia</th>
+                                        <th data-sort="customer_name">Klient</th>
+                                        <th data-sort="status">Status</th>
+                                        <th data-sort="items_count">Produkty</th>
+                                        <th data-sort="total">Kwota</th>
+                                        <th data-sort="created_at">Data</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="ordersTableBody">
+                                    <tr>
+                                        <td colspan="6" class="loading-container">
+                                            <div class="loading-spinner"></div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Products Tab -->
+                    <div class="tab-content" id="tab-products">
+                        <div class="table-controls">
+                            <input type="text" class="search-input" id="productsSearch" placeholder="Szukaj produktu...">
+                            <select class="filter-select" id="productsCategoryFilter">
+                                <option value="">Wszystkie kategorie</option>
+                            </select>
+                        </div>
+                        <div class="table-wrapper">
+                            <table class="data-table" id="productsTable">
+                                <thead>
+                                    <tr>
+                                        <th data-sort="sku">SKU</th>
+                                        <th data-sort="name">Nazwa</th>
+                                        <th data-sort="category">Kategoria</th>
+                                        <th data-sort="price">Cena</th>
+                                        <th>Warianty</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="productsTableBody">
+                                    <tr>
+                                        <td colspan="5" class="loading-container">
+                                            <div class="loading-spinner"></div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Returns Tab -->
+                    <div class="tab-content" id="tab-returns">
+                        <div class="table-controls">
+                            <input type="text" class="search-input" id="returnsSearch" placeholder="Szukaj zwrotu...">
+                            <select class="filter-select" id="returnsStatusFilter">
+                                <option value="">Wszystkie statusy</option>
+                                <option value="created">Utworzone</option>
+                                <option value="received">Otrzymane</option>
+                                <option value="refunded">Zwrócono środki</option>
+                                <option value="rejected">Odrzucone</option>
+                            </select>
+                        </div>
+                        <div class="table-wrapper">
+                            <table class="data-table" id="returnsTable">
+                                <thead>
+                                    <tr>
+                                        <th data-sort="id">Nr zwrotu</th>
+                                        <th data-sort="order_number">Nr zamówienia</th>
+                                        <th data-sort="customer_name">Klient</th>
+                                        <th data-sort="reason">Powód</th>
+                                        <th data-sort="status">Status</th>
+                                        <th data-sort="created_at">Data</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="returnsTableBody">
+                                    <tr>
+                                        <td colspan="6" class="loading-container">
+                                            <div class="loading-spinner"></div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </main>
+
+            <!-- Chat Panel -->
+            <aside class="chat-panel" id="chatPanel">
+                <!-- Chat will be rendered by chat.js -->
+            </aside>
+        </div>
+
+        <!-- Chat Overlay for mobile -->
+        <div class="chat-overlay" id="chatOverlay"></div>
+
+        <!-- Mobile Chat Toggle Button -->
+        <button class="mobile-chat-toggle" id="mobileChatToggle" aria-label="Otwórz czat">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="white">
+                <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z"/>
+            </svg>
+            <span class="chat-toggle-badge">AI</span>
+        </button>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script src="js/chat.js"></script>
+    <script src="js/admin.js"></script>
+    <script>
+        // Mobile chat toggle
+        const mobileChatToggle = document.getElementById('mobileChatToggle');
+        const chatPanel = document.getElementById('chatPanel');
+        const chatOverlay = document.getElementById('chatOverlay');
+
+        function openChat() {
+            chatPanel.classList.add('open');
+            chatOverlay.classList.add('open');
+            mobileChatToggle.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeChat() {
+            chatPanel.classList.remove('open');
+            chatOverlay.classList.remove('open');
+            mobileChatToggle.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        if (mobileChatToggle && chatPanel) {
+            mobileChatToggle.addEventListener('click', () => {
+                if (chatPanel.classList.contains('open')) {
+                    closeChat();
+                } else {
+                    openChat();
+                }
+            });
+
+            // Close chat when clicking overlay
+            if (chatOverlay) {
+                chatOverlay.addEventListener('click', closeChat);
+            }
+        }
+    </script>
+</body>
+</html>
