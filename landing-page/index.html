@@ -5,15 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- SEO Meta Tags -->
-    <title>Adrian Śliwka — Automatyzacja dla sklepów internetowych</title>
-    <meta name="description" content="Automatyzuję obsługę klienta, opisy produktów i procesy w e-commerce. 10 lat doświadczenia. Bezpłatna konsultacja.">
+    <title>Adrian Śliwka — Agenci AI i automatyzacje dla biznesu</title>
+    <meta name="description" content="Buduję agentów AI i automatyzacje, które przejmują powtarzalne zadania w Twojej firmie. 10 lat doświadczenia. E-commerce, usługi, B2B.">
     <meta name="author" content="Adrian Śliwka">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://sliwka.studio">
 
     <!-- Open Graph -->
-    <meta property="og:title" content="Adrian Śliwka — Automatyzacja dla sklepów internetowych">
-    <meta property="og:description" content="Automatyzuję obsługę klienta, opisy produktów i procesy w e-commerce. 10 lat doświadczenia.">
+    <meta property="og:title" content="Adrian Śliwka — Agenci AI i automatyzacje dla biznesu">
+    <meta property="og:description" content="Buduję agentów AI i automatyzacje, które przejmują powtarzalne zadania w Twojej firmie. 10 lat doświadczenia. E-commerce, usługi, B2B.">
     <meta property="og:url" content="https://sliwka.studio">
     <meta property="og:type" content="website">
     <meta property="og:locale" content="pl_PL">
@@ -21,8 +21,8 @@
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Adrian Śliwka — Automatyzacja dla sklepów internetowych">
-    <meta name="twitter:description" content="Automatyzuję obsługę klienta, opisy produktów i procesy w e-commerce. 10 lat doświadczenia.">
+    <meta name="twitter:title" content="Adrian Śliwka — Agenci AI i automatyzacje dla biznesu">
+    <meta name="twitter:description" content="Buduję agentów AI i automatyzacje, które przejmują powtarzalne zadania w Twojej firmie. 10 lat doświadczenia. E-commerce, usługi, B2B.">
 
     <!-- Favicon (inline SVG) -->
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%234361ee' width='100' height='100' rx='20'/><text x='50' y='68' font-family='system-ui' font-size='60' font-weight='bold' fill='white' text-anchor='middle'>S</text></svg>">
@@ -389,9 +389,68 @@
             gap: var(--space-4);
         }
 
+        /* ==================== Problems Section ==================== */
+        .problems {
+            background: var(--color-surface);
+        }
+
+        .problems__grid {
+            display: grid;
+            gap: var(--space-6);
+        }
+
+        @media (min-width: 768px) {
+            .problems__grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: var(--space-8);
+            }
+        }
+
+        .problem-card {
+            background: var(--color-background);
+            border-radius: var(--border-radius-lg);
+            padding: var(--space-6);
+            border: 1px solid var(--color-border);
+        }
+
+        .problem-card__icon {
+            color: var(--color-accent);
+            margin-bottom: var(--space-4);
+        }
+
+        .problem-card__title {
+            font-size: var(--font-size-lg);
+            font-weight: var(--font-weight-bold);
+            margin-bottom: var(--space-3);
+            line-height: var(--line-height-tight);
+        }
+
+        .problem-card__description {
+            color: var(--color-text-light);
+            font-size: var(--font-size-base);
+        }
+
+        .problems__summary {
+            margin-top: var(--space-8);
+            padding: var(--space-6);
+            background: var(--color-background);
+            border-radius: var(--border-radius-lg);
+            border: 2px solid var(--color-accent);
+            font-size: var(--font-size-lg);
+            text-align: center;
+            color: var(--color-text);
+        }
+
+        @media (min-width: 768px) {
+            .problems__summary {
+                margin-top: var(--space-12);
+                padding: var(--space-8);
+            }
+        }
+
         /* ==================== Projects Section ==================== */
         .projects {
-            background: var(--color-surface);
+            background: var(--color-background);
         }
 
         .projects__grid {
@@ -569,49 +628,100 @@
         }
 
         /* ==================== Services Section ==================== */
-        .services__grid {
-            display: grid;
+        .services {
+            background: var(--color-surface);
+        }
+
+        .services__list {
+            display: flex;
+            flex-direction: column;
             gap: var(--space-8);
         }
 
-        @media (min-width: 768px) {
-            .services__grid {
-                grid-template-columns: repeat(3, 1fr);
-            }
-        }
-
-        .service-block {
-            text-align: center;
+        .service-card {
+            background: var(--color-background);
+            border-radius: var(--border-radius-lg);
+            padding: var(--space-6);
+            border: 1px solid var(--color-border);
         }
 
         @media (min-width: 768px) {
-            .service-block {
-                text-align: left;
+            .service-card {
+                display: flex;
+                gap: var(--space-6);
+                padding: var(--space-8);
             }
         }
 
-        .service-block__icon {
+        .service-card__icon {
             color: var(--color-accent);
             margin-bottom: var(--space-4);
-            display: flex;
-            justify-content: center;
+            flex-shrink: 0;
         }
 
         @media (min-width: 768px) {
-            .service-block__icon {
-                justify-content: flex-start;
+            .service-card__icon {
+                margin-bottom: 0;
             }
         }
 
-        .service-block__title {
+        .service-card__content {
+            flex: 1;
+        }
+
+        .service-card__title {
             font-size: var(--font-size-xl);
             font-weight: var(--font-weight-bold);
+            margin-bottom: var(--space-4);
+            line-height: var(--line-height-tight);
+        }
+
+        .service-card__description {
+            color: var(--color-text-light);
+            font-size: var(--font-size-base);
+            margin-bottom: var(--space-6);
+        }
+
+        .service-card__examples {
+            background: var(--color-surface);
+            border-radius: var(--border-radius-md);
+            padding: var(--space-4);
+        }
+
+        .service-card__examples-title {
+            font-weight: var(--font-weight-semibold);
+            font-size: var(--font-size-sm);
+            color: var(--color-text-light);
             margin-bottom: var(--space-3);
         }
 
-        .service-block__description {
-            color: var(--color-text-light);
+        .service-card__examples ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .service-card__examples li {
+            padding-left: var(--space-5);
+            position: relative;
+            margin-bottom: var(--space-2);
             font-size: var(--font-size-base);
+            color: var(--color-text);
+        }
+
+        .service-card__examples li:last-child {
+            margin-bottom: 0;
+        }
+
+        .service-card__examples li::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 0.6em;
+            width: 6px;
+            height: 6px;
+            background: var(--color-accent);
+            border-radius: 50%;
         }
 
         /* ==================== Process Section ==================== */
@@ -662,7 +772,7 @@
 
         /* ==================== About Section ==================== */
         .about {
-            background: var(--color-surface);
+            background: var(--color-background);
         }
 
         .about__content {
@@ -671,6 +781,57 @@
 
         .about__content p {
             margin-bottom: var(--space-4);
+        }
+
+        .about__content p:last-child {
+            margin-bottom: 0;
+        }
+
+        /* ==================== Audience Section ==================== */
+        .audience {
+            background: var(--color-surface);
+        }
+
+        .audience__grid {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-4);
+        }
+
+        @media (min-width: 768px) {
+            .audience__grid {
+                gap: var(--space-5);
+            }
+        }
+
+        .audience-item {
+            display: flex;
+            align-items: flex-start;
+            gap: var(--space-4);
+            background: var(--color-background);
+            padding: var(--space-4) var(--space-5);
+            border-radius: var(--border-radius-md);
+            border: 1px solid var(--color-border);
+        }
+
+        .audience-item__icon {
+            color: var(--color-accent);
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .audience-item__content {
+            font-size: var(--font-size-base);
+            line-height: var(--line-height-normal);
+        }
+
+        .audience-item__content strong {
+            font-weight: var(--font-weight-bold);
+            color: var(--color-text);
+        }
+
+        .audience-item__content span {
+            color: var(--color-text-light);
         }
 
         /* ==================== Contact Section ==================== */
@@ -866,14 +1027,79 @@
         <section class="hero" id="hero">
             <div class="container">
                 <h1 class="hero__name">Adrian Śliwka</h1>
-                <p class="hero__tagline">Oszczędzam Twój czas. Automatyzuję powtarzalne zadania w sklepach internetowych.</p>
+                <p class="hero__tagline">Buduję agentów AI i automatyzacje, które pracują za Ciebie</p>
                 <p class="hero__description">
-                    10 lat w e-commerce. Buduję rozwiązania, które odpowiadają klientom,
-                    generują opisy produktów i synchronizują dane — bez Twojego udziału.
+                    Twój zespół traci godziny na powtarzalne zadania — odpowiadanie na te same pytania, ręczne przetwarzanie danych, pilnowanie statusów. Buduję rozwiązania AI, które przejmują te obowiązki. Dla e-commerce, usług i każdej firmy, która chce osiągać więcej przy mniejszym nakładzie pracy.
                 </p>
                 <div class="hero__cta">
                     <a href="#projects" class="btn btn--primary">Zobacz projekty</a>
                     <a href="#contact" class="btn btn--secondary">Porozmawiajmy</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Problem Section -->
+        <section class="problems" id="problems">
+            <div class="container">
+                <h2 class="section__title">Brzmi znajomo?</h2>
+
+                <div class="problems__grid">
+                    <div class="problem-card">
+                        <div class="problem-card__icon">
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                                <path d="M8 10h.01"/>
+                                <path d="M12 10h.01"/>
+                                <path d="M16 10h.01"/>
+                            </svg>
+                        </div>
+                        <h3 class="problem-card__title">Twój zespół odpowiada na te same pytania dzień w dzień</h3>
+                        <p class="problem-card__description">
+                            Klienci pytają o status zamówienia, cennik, dostępność — a Twój zespół traci na to godziny zamiast zajmować się tym, co naprawdę ważne.
+                        </p>
+                    </div>
+
+                    <div class="problem-card">
+                        <div class="problem-card__icon">
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <rect width="18" height="18" x="3" y="3" rx="2"/>
+                                <path d="M3 9h18"/>
+                                <path d="M9 21V9"/>
+                            </svg>
+                        </div>
+                        <h3 class="problem-card__title">Ręcznie przetwarzacie dane, które mogłyby płynąć same</h3>
+                        <p class="problem-card__description">
+                            Kopiowanie z maila do systemu, aktualizowanie Excela, generowanie raportów — to wszystko da się zautomatyzować.
+                        </p>
+                    </div>
+
+                    <div class="problem-card">
+                        <div class="problem-card__icon">
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"/>
+                                <polyline points="12 6 12 12 16 14"/>
+                            </svg>
+                        </div>
+                        <h3 class="problem-card__title">Klienci czekają, bo nikt nie odpisuje po godzinach</h3>
+                        <p class="problem-card__description">
+                            Twoja konkurencja odpowiada w 30 sekund. Ty odpowiadasz rano następnego dnia. Tracisz leady i klientów.
+                        </p>
+                    </div>
+
+                    <div class="problem-card">
+                        <div class="problem-card__icon">
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+                                <circle cx="9" cy="7" r="4"/>
+                                <path d="M22 21v-2a4 4 0 0 0-3-3.87"/>
+                                <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                            </svg>
+                        </div>
+                        <h3 class="problem-card__title">Chciałbyś skalować, ale nie chcesz zatrudniać kolejnych osób do powtarzalnej pracy</h3>
+                        <p class="problem-card__description">
+                            Agent AI pracuje 24/7, nie bierze urlopów i obsługuje 100 rozmów jednocześnie.
+                        </p>
+                    </div>
                 </div>
             </div>
         </section>
@@ -978,11 +1204,11 @@
         <!-- Services Section -->
         <section class="services" id="services">
             <div class="container">
-                <h2 class="section__title">Co oferuję</h2>
+                <h2 class="section__title">Co mogę dla Ciebie zbudować</h2>
 
-                <div class="services__grid">
-                    <div class="service-block">
-                        <div class="service-block__icon">
+                <div class="services__list">
+                    <div class="service-card">
+                        <div class="service-card__icon">
                             <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M12 8V4H8"/>
                                 <rect width="16" height="12" x="4" y="8" rx="2"/>
@@ -992,29 +1218,50 @@
                                 <path d="M9 13v2"/>
                             </svg>
                         </div>
-                        <h3 class="service-block__title">Klienci czekają na odpowiedź?</h3>
-                        <p class="service-block__description">
-                            Twój asystent odpowiada na pytania o zamówienia, zwroty i dostępność.
-                            W 5 sekund, 24/7, bez angażowania zespołu.
-                        </p>
+                        <div class="service-card__content">
+                            <h3 class="service-card__title">Agenci AI — Twój nowy pracownik, który nie śpi</h3>
+                            <p class="service-card__description">
+                                Inteligentny asystent, który rozmawia z Twoimi klientami, odpowiada na pytania, zbiera leady i rozwiązuje problemy — na czacie, mailu lub w dowolnym kanale. Podpięty pod Twoje dane, więc zna ofertę, statusy i historię. Działa 24/7. Gdy napotka złożony problem — przekazuje sprawę człowiekowi.
+                            </p>
+                            <div class="service-card__examples">
+                                <p class="service-card__examples-title">Przykłady zastosowań:</p>
+                                <ul>
+                                    <li>Obsługa klienta w sklepie internetowym</li>
+                                    <li>Zbieranie i kwalifikacja leadów na stronie usługowej</li>
+                                    <li>Asystent wewnętrzny dla zespołu (odpowiedzi na pytania o procedury, dokumenty, onboarding)</li>
+                                    <li>Wsparcie pacjentów w klinice (rejestracja, FAQ, przypomnienia)</li>
+                                </ul>
+                            </div>
+                        </div>
                     </div>
 
-                    <div class="service-block">
-                        <div class="service-block__icon">
+                    <div class="service-card">
+                        <div class="service-card__icon">
                             <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/>
                                 <path d="m9 12 2 2 4-4"/>
                             </svg>
                         </div>
-                        <h3 class="service-block__title">Brak czasu na opisy produktów?</h3>
-                        <p class="service-block__description">
-                            Generator tworzy unikalne opisy SEO dla setek produktów.
-                            Godziny zamiast tygodni ręcznej pracy.
-                        </p>
+                        <div class="service-card__content">
+                            <h3 class="service-card__title">Automatyzacje — koniec z powtarzalną pracą</h3>
+                            <p class="service-card__description">
+                                Jeśli Twój zespół wykonuje powtarzalne czynności — przekształcam je w automatyczny proces. Dane przepływają same, raporty generują się same, powiadomienia wysyłają się same. Zespół może skupić się na tym, co wymaga kreatywności i decyzji.
+                            </p>
+                            <div class="service-card__examples">
+                                <p class="service-card__examples-title">Przykłady zastosowań:</p>
+                                <ul>
+                                    <li>Automatyczne przetwarzanie zamówień i synchronizacja między systemami</li>
+                                    <li>Generowanie raportów dziennych/tygodniowych bez udziału człowieka</li>
+                                    <li>Powiadomienia i alerty (nowe zamówienie, niski stan, niezapłacona faktura)</li>
+                                    <li>Automatyzacja obiegu dokumentów — faktury, umowy, formularze</li>
+                                    <li>Tworzenie opisów produktów i treści marketingowych z pomocą AI</li>
+                                </ul>
+                            </div>
+                        </div>
                     </div>
 
-                    <div class="service-block">
-                        <div class="service-block__icon">
+                    <div class="service-card">
+                        <div class="service-card__icon">
                             <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                                 <rect width="8" height="8" x="2" y="2" rx="2"/>
                                 <path d="M14 2c1.1 0 2 .9 2 2v4c0 1.1-.9 2-2 2h-4"/>
@@ -1022,11 +1269,21 @@
                                 <path d="M10 22c-1.1 0-2-.9-2-2v-4c0-1.1.9-2 2-2h4"/>
                             </svg>
                         </div>
-                        <h3 class="service-block__title">Dane w 5 różnych miejscach?</h3>
-                        <p class="service-block__description">
-                            Allegro, BaseLinker, magazyn, kurierzy — jedna synchronizacja.
-                            Koniec z ręcznym kopiowaniem między arkuszami.
-                        </p>
+                        <div class="service-card__content">
+                            <h3 class="service-card__title">Integracje — wszystko połączone w jedno</h3>
+                            <p class="service-card__description">
+                                Twoje narzędzia nie komunikują się ze sobą? Sklep nie widzi magazynu, CRM nie wie o nowym kliencie, a dane są kopiowane ręcznie z systemu do systemu. Integruję to w spójną całość — żeby informacja przepływała automatycznie tam, gdzie jest potrzebna.
+                            </p>
+                            <div class="service-card__examples">
+                                <p class="service-card__examples-title">Przykłady zastosowań:</p>
+                                <ul>
+                                    <li>Sklep ↔ magazyn ↔ kurier ↔ księgowość — jeden przepływ</li>
+                                    <li>CRM połączony z formularzem na stronie i mailingiem</li>
+                                    <li>Synchronizacja danych między dowolnymi systemami i API</li>
+                                    <li>Własne integracje tam, gdzie gotowe wtyczki nie wystarczają</li>
+                                </ul>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1040,19 +1297,17 @@
                 <div class="process__grid">
                     <div class="process-step">
                         <div class="process-step__number">1</div>
-                        <h3 class="process-step__title">Rozmowa wstępna</h3>
+                        <h3 class="process-step__title">Rozmowa</h3>
                         <p class="process-step__description">
-                            Poznaję Twój biznes, problemy i cele.
-                            Określamy czy AI ma sens. Bezpłatnie.
+                            Opowiadasz mi o swoim biznesie i wyzwaniach, z którymi się mierzysz. Razem ustalamy czy AI faktycznie rozwiąże Twój problem — a nie czy brzmi atrakcyjnie. Bezpłatnie, bez zobowiązań.
                         </p>
                     </div>
 
                     <div class="process-step">
                         <div class="process-step__number">2</div>
-                        <h3 class="process-step__title">Propozycja</h3>
+                        <h3 class="process-step__title">Plan i wycena</h3>
                         <p class="process-step__description">
-                            Przedstawiam koncepcję, zakres i wycenę.
-                            Bez zobowiązań.
+                            Dostajesz konkretną propozycję — co zbuduję, jak to będzie działać i ile to kosztuje. Bez technicznego żargonu, w zrozumiałym języku.
                         </p>
                     </div>
 
@@ -1060,17 +1315,15 @@
                         <div class="process-step__number">3</div>
                         <h3 class="process-step__title">Budowa</h3>
                         <p class="process-step__description">
-                            Tworzę rozwiązanie etapami.
-                            Na bieżąco pokazuję postępy.
+                            Buduję rozwiązanie etapami. Widzisz postępy na bieżąco, dajesz feedback, korygujemy kurs jeśli trzeba.
                         </p>
                     </div>
 
                     <div class="process-step">
                         <div class="process-step__number">4</div>
-                        <h3 class="process-step__title">Wdrożenie</h3>
+                        <h3 class="process-step__title">Wdrożenie i wsparcie</h3>
                         <p class="process-step__description">
-                            Uruchamiam system u Ciebie.
-                            30 dni wsparcia w cenie.
+                            Uruchamiam system u Ciebie. Uczę Twój zespół jak z tego korzystać. 30 dni wsparcia w cenie — żebyś miał pewność, że wszystko działa.
                         </p>
                     </div>
                 </div>
@@ -1083,14 +1336,91 @@
                 <h2 class="section__title">O mnie</h2>
                 <div class="about__content">
                     <p>
-                        10 lat buduję systemy dla e-commerce — od małych sklepów po platformy
-                        obsługujące tysiące zamówień dziennie. Znam problemy od środka:
-                        wiem co blokuje skalowanie i gdzie tracisz czas.
+                        10 lat w branży. Znam duże systemy e-commerce — projektowałem architektury, budowałem integracje z dziesiątkami zewnętrznych serwisów, rozwiązywałem problemy które kosztowały firmy realne pieniądze.
                     </p>
                     <p>
-                        Dziś automatyzuję te wąskie gardła. Nie sprzedaję technologii —
-                        rozwiązuję konkretne problemy, które sam wielokrotnie napotykałem.
+                        Dziś łączę to doświadczenie z AI. E-commerce to mój fundament, ale rozwiązania które buduję działają w każdej branży — bo powtarzalne procesy, chaos w danych i brak czasu to problemy uniwersalne.
                     </p>
+                    <p>
+                        Nie sprzedaję technologii dla samej technologii. Jeśli AI nie rozwiąże Twojego problemu — powiem Ci to wprost.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Target Audience Section -->
+        <section class="audience" id="audience">
+            <div class="container">
+                <h2 class="section__title">Dla kogo to jest</h2>
+                <div class="audience__grid">
+                    <div class="audience-item">
+                        <div class="audience-item__icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="8" cy="21" r="1"/>
+                                <circle cx="19" cy="21" r="1"/>
+                                <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/>
+                            </svg>
+                        </div>
+                        <div class="audience-item__content">
+                            <strong>Sklepy internetowe</strong>
+                            <span>— które chcą obsługiwać klientów szybciej i taniej</span>
+                        </div>
+                    </div>
+
+                    <div class="audience-item">
+                        <div class="audience-item__icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M20 7h-9"/>
+                                <path d="M14 17H5"/>
+                                <circle cx="17" cy="17" r="3"/>
+                                <circle cx="7" cy="7" r="3"/>
+                            </svg>
+                        </div>
+                        <div class="audience-item__content">
+                            <strong>Firmy usługowe</strong>
+                            <span>— które tracą leady bo nie odpisują na czas</span>
+                        </div>
+                    </div>
+
+                    <div class="audience-item">
+                        <div class="audience-item__icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+                                <circle cx="9" cy="7" r="4"/>
+                                <path d="M22 21v-2a4 4 0 0 0-3-3.87"/>
+                                <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                            </svg>
+                        </div>
+                        <div class="audience-item__content">
+                            <strong>Małe i średnie firmy</strong>
+                            <span>— które chcą rosnąć bez zatrudniania do powtarzalnej pracy</span>
+                        </div>
+                    </div>
+
+                    <div class="audience-item">
+                        <div class="audience-item__icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/>
+                            </svg>
+                        </div>
+                        <div class="audience-item__content">
+                            <strong>Startupy i SaaS</strong>
+                            <span>— które potrzebują automatyzacji od dnia pierwszego</span>
+                        </div>
+                    </div>
+
+                    <div class="audience-item">
+                        <div class="audience-item__icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/>
+                                <path d="m9 12 2 2 4-4"/>
+                            </svg>
+                        </div>
+                        <div class="audience-item__content">
+                            <strong>Każdy, kto ma powtarzalny proces</strong>
+                            <span>— i chciałby żeby robił się sam</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -1098,10 +1428,9 @@
         <!-- Contact Section -->
         <section class="contact" id="contact">
             <div class="container">
-                <h2 class="section__title">Chcesz zautomatyzować swój sklep?</h2>
+                <h2 class="section__title">Masz problem, który chcesz rozwiązać?</h2>
                 <p class="contact__intro">
-                    Opisz swój problem lub pomysł — odezwę się w ciągu 24 godzin.
-                    Pierwsze konsultacje są bezpłatne.
+                    Opisz wyzwanie, z którym się mierzysz — odezwę się w ciągu 24 godzin. Pierwsza rozmowa jest bezpłatna.
                 </p>
 
                 <form class="contact__form" id="contactForm" novalidate>
