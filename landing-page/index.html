@@ -485,6 +485,39 @@
             }
         }
 
+        .project-card__tech:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Flagship project card */
+        .project-card--flagship {
+            border: 2px solid var(--color-accent);
+            box-shadow: 0 10px 30px -12px rgba(67, 97, 238, 0.25);
+            background: linear-gradient(180deg, rgba(67, 97, 238, 0.04) 0%, var(--color-background) 60%);
+        }
+
+        .project-card__flagship-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-2);
+            background: var(--color-accent);
+            color: white;
+            padding: var(--space-1) var(--space-3);
+            border-radius: var(--border-radius-sm);
+            font-size: var(--font-size-xs);
+            font-weight: var(--font-weight-semibold);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: var(--space-3);
+        }
+
+        .project-card__placeholder--ocr {
+            aspect-ratio: 16 / 10;
+            background: linear-gradient(135deg, rgba(67, 97, 238, 0.12) 0%, rgba(67, 97, 238, 0.04) 100%);
+            color: var(--color-accent);
+            font-weight: var(--font-weight-semibold);
+        }
+
         .project-card__zoom {
             position: relative;
             display: block;
@@ -785,6 +818,34 @@
 
         .about__content p:last-child {
             margin-bottom: 0;
+        }
+
+        .about__certification {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-2);
+            margin-top: var(--space-6);
+            padding: var(--space-2) var(--space-4);
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: var(--border-radius-md);
+            font-size: var(--font-size-sm);
+            color: var(--color-text-light);
+            text-decoration: none;
+            transition: border-color 0.15s, color 0.15s, background-color 0.15s;
+        }
+
+        .about__certification:hover {
+            border-color: var(--color-accent);
+            color: var(--color-accent);
+            background: var(--color-background);
+            text-decoration: none;
+        }
+
+        .about__certification svg {
+            width: 16px;
+            height: 16px;
+            flex-shrink: 0;
         }
 
         /* ==================== Audience Section ==================== */
@@ -1110,6 +1171,35 @@
                 <h2 class="section__title">Projekty</h2>
 
                 <div class="projects__grid">
+                    <!-- Custom OCR — Flagship Project -->
+                    <article class="project-card project-card--featured project-card--flagship">
+                        <div class="project-card__image">
+                            <!-- TODO: gdy assets/ocr-model.png pojawi się, zastąp placeholder przyciskiem .project-card__zoom z img (wzór: kafelki poniżej). -->
+                            <div class="project-card__placeholder project-card__placeholder--ocr">
+                                <span>Custom OCR — grafika wkrótce</span>
+                            </div>
+                        </div>
+                        <div class="project-card__content">
+                            <span class="project-card__flagship-badge">Flagowy projekt</span>
+                            <h3 class="project-card__title">Custom OCR — odczyt polskich formularzy</h3>
+                            <p class="project-card__description">
+                                Model wizyjny (oparty na TrOCR) rozpoznający odręczne numery telefonów z formularzy w języku polskim. Wytrenowany na ponad 100 000 dokumentów. Wdrożony produkcyjnie w dużej firmie e-commerce.
+                            </p>
+                            <ul class="project-card__features">
+                                <li>Rozpoznawanie pisma odręcznego</li>
+                                <li>Specjalizacja: polskie formularze</li>
+                                <li>Trening na 100k+ dokumentów</li>
+                                <li>Wdrożenie produkcyjne</li>
+                            </ul>
+                            <div class="project-card__tech">
+                                <span class="tech-tag">Computer Vision</span>
+                                <span class="tech-tag">Custom Model</span>
+                                <span class="tech-tag">Production</span>
+                                <span class="tech-tag">E-commerce</span>
+                            </div>
+                        </div>
+                    </article>
+
                     <!-- Main Project -->
                     <article class="project-card project-card--featured">
                         <div class="project-card__image">
@@ -1144,7 +1234,6 @@
                                 <span class="tech-tag">Eskalacja do człowieka</span>
                                 <span class="tech-tag">Bez kodowania</span>
                             </div>
-                            <a href="/chat/" class="btn btn--primary">Zobacz demo</a>
                         </div>
                     </article>
 
@@ -1182,7 +1271,6 @@
                                 <span class="tech-tag">Symulacje cenowe</span>
                                 <span class="tech-tag">Prosty interfejs</span>
                             </div>
-                            <a href="https://sliwka.studio/koly/?demo=true" class="btn btn--primary" target="_blank" rel="noopener">Zobacz demo</a>
                         </div>
                     </article>
 
@@ -1344,6 +1432,16 @@
                     <p>
                         Nie sprzedaję technologii dla samej technologii. Jeśli AI nie rozwiąże Twojego problemu — powiem Ci to wprost.
                     </p>
+                    <a href="https://verify.skilljar.com/c/d997mdyzd6g2"
+                       target="_blank"
+                       rel="noopener noreferrer"
+                       class="about__certification">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                            <path d="m9 12 2 2 4-4"/>
+                        </svg>
+                        <span>Anthropic API Certified</span>
+                    </a>
                 </div>
             </div>
         </section>
