@@ -841,6 +841,32 @@
             margin-bottom: 0;
         }
 
+        .about__badge {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-2);
+            margin-top: var(--space-6);
+            padding: var(--space-2) var(--space-4);
+            font-size: var(--font-size-sm);
+            color: var(--color-text-light);
+            text-decoration: none;
+            border: 1px solid var(--color-border);
+            border-radius: var(--border-radius-sm);
+            transition: color 0.15s, border-color 0.15s;
+        }
+
+        .about__badge:hover {
+            color: var(--color-accent);
+            border-color: var(--color-accent);
+            text-decoration: none;
+        }
+
+        .about__badge svg {
+            width: 14px;
+            height: 14px;
+            flex-shrink: 0;
+        }
+
         /* ==================== Audience Section ==================== */
         .audience {
             background: var(--color-surface);
@@ -1438,6 +1464,16 @@
                     <p>
                         Nie sprzedaję technologii dla samej technologii. Jeśli AI nie rozwiąże Twojego problemu — powiem Ci to wprost.
                     </p>
+                    <a href="https://verify.skilljar.com/c/d997mdyzd6g2"
+                       target="_blank"
+                       rel="noopener noreferrer"
+                       class="about__badge">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                            <path d="m9 12 2 2 4-4"/>
+                        </svg>
+                        <span>Anthropic API Certified</span>
+                    </a>
                 </div>
             </div>
         </section>
