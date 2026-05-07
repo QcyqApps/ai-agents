@@ -1,0 +1,418 @@
+- generic [active] [ref=e1]:
+  - navigation "Główna nawigacja" [ref=e2]:
+    - generic [ref=e3]:
+      - link "sliwka.studio — strona główna" [ref=e4] [cursor=pointer]:
+        - /url: "#top"
+        - generic [ref=e6]: sliwka
+        - generic [ref=e7]: .studio
+      - generic [ref=e8]:
+        - link "jak to działa" [ref=e9] [cursor=pointer]:
+          - /url: "#flow"
+        - link "co dostajesz" [ref=e10] [cursor=pointer]:
+          - /url: "#package"
+        - link "realizacje" [ref=e11] [cursor=pointer]:
+          - /url: "#work"
+        - link "umów rozmowę →" [ref=e12] [cursor=pointer]:
+          - /url: "#contact"
+  - main [ref=e13]:
+    - generic [ref=e16]:
+      - generic [ref=e17]:
+        - generic [ref=e20]: Przyjmuję projekty na Q3 2026
+        - link "Anthropic API Certified — zweryfikuj certyfikat" [ref=e21] [cursor=pointer]:
+          - /url: https://verify.skilljar.com/c/d997mdyzd6g2
+          - img [ref=e22]
+          - generic [ref=e25]: Anthropic API Certified
+        - heading "Twój zespół zyskuje dewelopera, który nigdy nie śpi." [level=1] [ref=e26]:
+          - text: Twój zespół zyskuje
+          - text: dewelopera, który
+          - emphasis [ref=e27]: nigdy nie śpi
+          - text: .
+        - paragraph [ref=e28]:
+          - text: Wdrażam
+          - strong [ref=e29]: Claude Code
+          - text: w organizacjach jako pełnoprawnego członka zespołu — z dostępem do Jiry, GitHuba i waszych standardów. Bierze ticket, planuje, koduje, wystawia PR. Wy review'ujecie.
+        - generic [ref=e30]:
+          - link "Umów 30 min konsultacji" [ref=e31] [cursor=pointer]:
+            - /url: "#contact"
+            - text: Umów 30 min konsultacji
+            - generic [ref=e32]: →
+          - link "Zobacz jak to działa" [ref=e33] [cursor=pointer]:
+            - /url: "#flow"
+      - generic [ref=e36]:
+        - generic [ref=e37]:
+          - generic [ref=e42]: PIPELINE · LIVE
+          - generic [ref=e43]:
+            - button "Krok 1" [ref=e44] [cursor=pointer]
+            - button "Krok 2" [ref=e45] [cursor=pointer]
+            - button "Krok 3" [ref=e46] [cursor=pointer]
+            - button "Krok 4" [ref=e47] [cursor=pointer]
+        - generic [ref=e48]:
+          - generic [ref=e49]:
+            - generic [ref=e50]: JIRA
+            - generic [ref=e51]:
+              - generic [ref=e52]: Ticket pojawia się w Jirze
+              - generic [ref=e53]: API-1242 · Eksport CSV w panelu
+          - generic [ref=e56]:
+            - generic [ref=e57]: PLAN
+            - generic [ref=e58]:
+              - generic [ref=e59]: Claude Code tworzy plan
+              - generic [ref=e60]: plan.md · 7 kroków · 12 plików
+          - generic [ref=e61]:
+            - generic [ref=e62]: CODE
+            - generic [ref=e63]:
+              - generic [ref=e64]: Pisze kod zgodnie z planem
+              - generic [ref=e65]: feature/api-1242 · 480 + / 32 −
+          - generic [ref=e66]:
+            - generic [ref=e67]: PR
+            - generic [ref=e68]:
+              - generic [ref=e69]: Wystawia PR i aktualizuje Jirę
+              - generic [ref=e70]: "#PR-3380 · gotowe do review"
+    - generic [ref=e72]:
+      - generic [ref=e73]:
+        - generic [ref=e74]:
+          - generic [ref=e75]: 02 · Jak to działa
+          - heading "Cztery kroki. Bez zmian w sposobie pracy zespołu." [level=2] [ref=e76]:
+            - text: Cztery kroki. Bez zmian
+            - text: w sposobie pracy zespołu.
+        - paragraph [ref=e77]: Claude Code wpina się tam, gdzie i tak już pracujecie — w Jirze i na GitHubie. Nie musicie zmieniać procesu, narzędzi ani standardów. Wybierz poniżej, jak chcesz zobaczyć ten flow.
+      - tablist [ref=e78]:
+        - tab "Split view" [selected] [ref=e79] [cursor=pointer]
+        - tab "Live terminal" [ref=e80] [cursor=pointer]
+      - generic [ref=e83]:
+        - generic [ref=e84]:
+          - generic [ref=e85]: KROK 01 · JIRA
+          - heading "Ticket trafia do agenta" [level=3] [ref=e86]:
+            - generic [ref=e87]: Ticket
+            - generic [ref=e88]: trafia
+            - generic [ref=e89]: do
+            - generic [ref=e90]: agenta
+          - paragraph [ref=e91]:
+            - generic [ref=e92]: PM
+            - generic [ref=e93]: zakłada
+            - generic [ref=e94]: zadanie
+            - generic [ref=e95]: tak
+            - generic [ref=e96]: jak
+            - generic [ref=e97]: zawsze
+            - generic [ref=e98]: —
+            - generic [ref=e99]: w
+            - generic [ref=e100]: Jirze.
+            - generic [ref=e101]: Wystarczy
+            - generic [ref=e102]: label
+            - generic [ref=e103]: "\"claude-code\"."
+            - generic [ref=e104]: Agent
+            - generic [ref=e105]: monitoruje
+            - generic [ref=e106]: wybrane
+            - generic [ref=e107]: projekty
+            - generic [ref=e108]: i
+            - generic [ref=e109]: bierze
+            - generic [ref=e110]: ticket
+            - generic [ref=e111]: na
+            - generic [ref=e112]: warsztat.
+          - generic [ref=e113]:
+            - generic:
+              - generic:
+                - generic:
+                  - img
+                - generic:
+                  - img
+            - generic [ref=e114]:
+              - button "JIRA 01" [ref=e115] [cursor=pointer]:
+                - generic [ref=e116]: JIRA
+                - generic [ref=e117]: "01"
+              - button "PLAN 02" [ref=e119] [cursor=pointer]:
+                - generic [ref=e120]: PLAN
+                - generic [ref=e121]: "02"
+              - button "CODE 03" [ref=e123] [cursor=pointer]:
+                - generic [ref=e124]: CODE
+                - generic [ref=e125]: "03"
+              - button "PR 04" [ref=e127] [cursor=pointer]:
+                - generic [ref=e128]: PR
+                - generic [ref=e129]: "04"
+          - generic [ref=e130]:
+            - button "← poprzedni" [ref=e131] [cursor=pointer]
+            - button "następny →" [ref=e132] [cursor=pointer]
+            - button "⏸ pauza" [ref=e133] [cursor=pointer]
+            - generic [ref=e134]: agent pracuje…
+        - generic [ref=e136]:
+          - generic [ref=e138]:
+            - generic [ref=e139]:
+              - generic [ref=e140]: J
+              - generic [ref=e141]: JIRA · ECOM
+              - generic [ref=e142]: IN PROGRESS
+            - generic [ref=e143]: API-1242
+            - heading "Eksport CSV w panelu klienta" [level=4] [ref=e144]
+            - generic [ref=e145]:
+              - generic [ref=e146]: claude-code
+              - generic [ref=e147]: backend
+              - generic [ref=e148]: frontend
+            - generic [ref=e149]:
+              - strong [ref=e150]: Jako
+              - text: użytkownik panelu
+              - strong [ref=e151]: chcę
+              - text: eksportować zamówienia do CSV
+              - strong [ref=e152]: by
+              - text: przesłać dane do księgowości
+            - generic [ref=e153]: "Akceptacja:"
+            - list [ref=e154]:
+              - listitem [ref=e155]: Wybór zakresu dat
+              - listitem [ref=e156]: 50k+ wierszy bez timeoutu
+              - listitem [ref=e157]: Toast z postępem
+            - generic [ref=e158]: "Reporter: PM · Assignee: claude-code"
+          - generic [ref=e160]:
+            - generic [ref=e161]:
+              - generic [ref=e162]: ●
+              - generic [ref=e163]: GITHUB · plans-repo
+              - generic [ref=e164]: "PR #112 ✓"
+            - generic [ref=e165]: plans/API-1242.md
+            - generic [ref=e166]:
+              - generic [ref=e167]: "# Plan: Eksport CSV"
+              - generic [ref=e168]: "> API-1242 · feature/api-1242"
+              - generic [ref=e170]: "## Kroki"
+              - generic [ref=e171]:
+                - generic [ref=e172]: "[1]"
+                - generic [ref=e173]: Endpoint /api/exports/csv (POST)
+              - generic [ref=e174]:
+                - generic [ref=e175]: "[2]"
+                - generic [ref=e176]: Strumień — chunked write
+              - generic [ref=e177]:
+                - generic [ref=e178]: "[3]"
+                - generic [ref=e179]: Walidacja zakresu dat
+              - generic [ref=e180]:
+                - generic [ref=e181]: "[4]"
+                - generic [ref=e182]: <ExportButton/> + toast
+              - generic [ref=e183]:
+                - generic [ref=e184]: "[5]"
+                - generic [ref=e185]: Test e2e — 50k wierszy
+              - generic [ref=e186]:
+                - generic [ref=e187]: "[6]"
+                - generic [ref=e188]: docs/exports.md
+              - generic [ref=e190]: "## ~480 linii · 12 plików"
+            - generic [ref=e191]: ✓ Plan zaakceptowany przez @senior-dev
+          - generic [ref=e193]:
+            - generic [ref=e194]:
+              - generic [ref=e195]: </>
+              - generic [ref=e196]: EDITOR · exports.ts
+              - generic [ref=e197]: —
+            - generic [ref=e198]:
+              - generic [ref=e199]:
+                - generic [ref=e200]: "12"
+                - generic [ref=e201]: // per plan §2 — chunked write
+              - generic [ref=e202]:
+                - generic [ref=e203]: "13"
+                - generic [ref=e204]: "export async function streamCsv({ from, to }) {"
+              - generic [ref=e205]:
+                - generic [ref=e206]: "14"
+                - generic [ref=e207]: const s = createStream();
+              - generic [ref=e208]:
+                - generic [ref=e209]: "15"
+                - generic [ref=e210]: "for await (const c of fetchOrders()) {"
+              - generic [ref=e211]:
+                - generic [ref=e212]: "16"
+                - generic [ref=e213]: s.write(toCsvRow(c));
+              - generic [ref=e214]:
+                - generic [ref=e215]: "17"
+                - generic [ref=e216]: "}"
+              - generic [ref=e217]:
+                - generic [ref=e218]: "18"
+                - generic [ref=e219]: return s.finalize();
+            - generic [ref=e220]:
+              - generic [ref=e221]: ✓ ESLint
+              - generic [ref=e222]: ✓ style
+              - generic [ref=e223]: ✓ Tests
+          - generic [ref=e225]:
+            - generic [ref=e226]:
+              - generic [ref=e227]: ●
+              - generic [ref=e228]: GITHUB · pull request
+              - generic [ref=e229]: OPEN
+            - generic [ref=e230]: "#3380"
+            - 'heading "API-1242: Eksport CSV w panelu" [level=4] [ref=e231]'
+            - generic [ref=e232]:
+              - generic [ref=e233]: +480 / −32
+              - generic [ref=e234]: 12 plików
+              - generic [ref=e235]: ● CI ✓
+            - generic [ref=e236]: "Zmiany:"
+            - generic [ref=e237]:
+              - generic [ref=e238]:
+                - generic [ref=e239]: src/api/exports.ts
+                - generic [ref=e240]: +new
+              - generic [ref=e241]:
+                - generic [ref=e242]: components/ExportButton.tsx
+                - generic [ref=e243]: +new
+              - generic [ref=e244]:
+                - generic [ref=e245]: tests/e2e/export.spec.ts
+                - generic [ref=e246]: +new
+              - generic [ref=e247]:
+                - generic [ref=e248]: docs/exports.md
+                - generic [ref=e249]: +new
+            - generic [ref=e250]:
+              - text: 💬
+              - strong [ref=e251]: "Komentarz w Jirze API-1242:"
+              - emphasis [ref=e252]: "\"PR gotowy do review →\""
+            - generic [ref=e253]:
+              - generic [ref=e254]: CC
+              - generic [ref=e255]:
+                - text: "review:"
+                - strong [ref=e256]: "@senior-dev"
+    - generic [ref=e258]:
+      - generic [ref=e259]:
+        - generic [ref=e260]:
+          - generic [ref=e261]: 03 · Co dostajesz
+          - heading "Trzy warstwy, które czynią agenta waszym." [level=2] [ref=e262]:
+            - text: Trzy warstwy, które
+            - text: czynią agenta
+            - emphasis [ref=e263]: waszym
+            - text: .
+        - paragraph [ref=e264]:
+          - text: Claude Code z pudełka jest mądry, ale generyczny. Moja praca polega na nauczeniu go, jak robić rzeczy
+          - emphasis [ref=e265]: po waszemu
+          - text: — i pilnowaniu, żeby tego nie zapomniał.
+      - tablist [ref=e266]:
+        - tab "◇ SKILLS Skille — wiedza domenowa Co Claude Code wie o waszym kodzie i biznesie" [selected] [ref=e267] [cursor=pointer]:
+          - generic [ref=e268]:
+            - generic [ref=e269]: ◇
+            - generic [ref=e270]: SKILLS
+            - heading "Skille — wiedza domenowa" [level=3] [ref=e271]
+            - paragraph [ref=e272]: Co Claude Code wie o waszym kodzie i biznesie
+        - tab "◈ HOOKS Hooki — automatyczne kontrole Czego agent nie może zrobić, nawet gdyby chciał" [ref=e273] [cursor=pointer]:
+          - generic [ref=e274]:
+            - generic [ref=e275]: ◈
+            - generic [ref=e276]: HOOKS
+            - heading "Hooki — automatyczne kontrole" [level=3] [ref=e277]
+            - paragraph [ref=e278]: Czego agent nie może zrobić, nawet gdyby chciał
+        - tab "◆ RULES Reguły — granice swobody Co wolno, czego nie wolno, kiedy pytać człowieka" [ref=e279] [cursor=pointer]:
+          - generic [ref=e280]:
+            - generic [ref=e281]: ◆
+            - generic [ref=e282]: RULES
+            - heading "Reguły — granice swobody" [level=3] [ref=e283]
+            - paragraph [ref=e284]: Co wolno, czego nie wolno, kiedy pytać człowieka
+      - generic [ref=e286]:
+        - generic [ref=e287]:
+          - generic [ref=e288]: SKILLS — DETALE
+          - heading "Skille — wiedza domenowa" [level=4] [ref=e289]
+          - paragraph [ref=e290]: Skill to spakowana wiedza ekspercka dla agenta. Tworzymy je razem z waszym tech leadem — od konwencji nazewnictwa, przez patterny architektoniczne, po sposób pisania testów. Agent sięga po właściwy skill automatycznie.
+        - generic [ref=e291]:
+          - generic [ref=e292]: PRZYKŁADY
+          - list [ref=e293]:
+            - listitem [ref=e294]: backend-style — jak pisać kontrolery, error handling, logging
+            - listitem [ref=e295]: test-conventions — czego testujemy, czego nie, jak nazywać
+            - listitem [ref=e296]: database-migrations — jak bezpiecznie zmieniać schemat
+            - listitem [ref=e297]: design-system — które komponenty UI używać, kiedy nowe
+    - generic [ref=e299]:
+      - generic [ref=e300]:
+        - generic [ref=e301]: 04 · Realizacje
+        - heading "Ostatnie wdrożenia." [level=2] [ref=e302]:
+          - text: Ostatnie
+          - text: wdrożenia.
+      - generic [ref=e303]:
+        - article [ref=e304]:
+          - generic [ref=e305]:
+            - generic [ref=e306]:
+              - generic [ref=e307]: CASE 01 / 02
+              - generic [ref=e308]: CC
+            - generic [ref=e309]:
+              - generic [ref=e310]: KLIENT
+              - generic [ref=e311]: duża firma e-commerce
+              - generic [ref=e312]: Retail / E-commerce · 2026
+          - generic [ref=e313]:
+            - heading "Claude Code jako pełnoetatowy członek zespołu" [level=3] [ref=e314]
+            - paragraph [ref=e315]: Wdrożenie Claude Code w organizacji z 60+ deweloperami. Agent przejął standardowe taski (CRUD, integracje, refactory) — zespół skupił się na architekturze.
+            - generic [ref=e316]: ZAKRES
+            - list [ref=e317]:
+              - listitem [ref=e318]:
+                - generic [ref=e319]: —
+                - generic [ref=e320]: Integracja z Jirą i GitHub Enterprise
+              - listitem [ref=e321]:
+                - generic [ref=e322]: —
+                - generic [ref=e323]: 14 skilli dopasowanych do stacku (TS, Go, Postgres)
+              - listitem [ref=e324]:
+                - generic [ref=e325]: —
+                - generic [ref=e326]: 8 hooków + system reguł zatwierdzony przez DevOps
+              - listitem [ref=e327]:
+                - generic [ref=e328]: —
+                - generic [ref=e329]: Repo planów osobno — pełna audytowalność decyzji
+        - article [ref=e330]:
+          - generic [ref=e331]:
+            - generic [ref=e332]:
+              - generic [ref=e333]: CASE 02 / 02
+              - generic [ref=e334]: ML
+            - generic [ref=e335]:
+              - generic [ref=e336]: KLIENT
+              - generic [ref=e337]: duża firma e-commerce
+              - generic [ref=e338]: Computer Vision · 2026
+          - generic [ref=e339]:
+            - heading "TrOCR dla odręcznych numerów telefonów (PL)" [level=3] [ref=e340]
+            - paragraph [ref=e341]: Model wizyjny rozpoznający odręcznie pisane polskie numery telefonów z formularzy papierowych. Wytrenowany na własnym datasecie 100k+ dokumentów. W produkcji od 2024.
+            - generic [ref=e342]:
+              - generic [ref=e343]:
+                - generic [ref=e344]: 100k+
+                - generic [ref=e345]: dokumentów w datasecie treningowym
+              - generic [ref=e346]:
+                - generic [ref=e347]: 98.2%
+                - generic [ref=e348]: accuracy na zbiorze testowym
+              - generic [ref=e349]:
+                - generic [ref=e350]: ~120ms
+                - generic [ref=e351]: inference per dokument
+            - generic [ref=e352]: ZAKRES
+            - list [ref=e353]:
+              - listitem [ref=e354]:
+                - generic [ref=e355]: —
+                - generic [ref=e356]: Architektura oparta na TrOCR (encoder-decoder)
+              - listitem [ref=e357]:
+                - generic [ref=e358]: —
+                - generic [ref=e359]: Custom data pipeline — augmentacja, normalizacja
+              - listitem [ref=e360]:
+                - generic [ref=e361]: —
+                - generic [ref=e362]: Wdrożenie produkcyjne z monitoringiem
+              - listitem [ref=e363]:
+                - generic [ref=e364]: —
+                - generic [ref=e365]: Replacement dla manualnego data entry
+    - generic [ref=e368]:
+      - generic [ref=e369]:
+        - generic [ref=e370]: 05 · Kto za tym stoi
+        - heading "10+ lat w kodzie." [level=2] [ref=e371]:
+          - text: 10+ lat
+          - emphasis [ref=e372]: w kodzie.
+      - generic [ref=e373]:
+        - paragraph [ref=e374]: Programuję od ponad dekady. Ostatnie lata spędziłem budując automatyzacje AI dla firm — od modeli wizyjnych w produkcji, po asystentów w codziennej pracy zespołów.
+        - paragraph [ref=e375]: W 2025 zrobiłem pivot. Claude Code okazał się narzędziem, które realnie zmienia sposób pracy zespołów developerskich — pod warunkiem, że jest dobrze wpięte. Dzisiaj robię tylko to.
+        - generic [ref=e376]:
+          - generic [ref=e377]:
+            - generic [ref=e378]: LOKALIZACJA
+            - generic [ref=e379]: Polska · zdalnie
+          - generic [ref=e380]:
+            - generic [ref=e381]: STAWKA
+            - generic [ref=e382]: rozmawiamy
+          - generic [ref=e383]:
+            - generic [ref=e384]: STACK
+            - generic [ref=e385]: TS · Go · Python · ML
+          - generic [ref=e386]:
+            - generic [ref=e387]: DOSTĘPNOŚĆ
+            - generic [ref=e388]: Q3 2026 — 1 slot
+    - generic [ref=e391]:
+      - generic [ref=e392]: 06 · ZACZNIJMY
+      - heading "30 minut wystarczy, żeby zobaczyć, czy to ma sens." [level=2] [ref=e393]:
+        - text: 30 minut wystarczy,
+        - text: żeby
+        - emphasis [ref=e394]: zobaczyć
+        - text: ", czy to ma sens."
+      - paragraph [ref=e395]: Krótka rozmowa — pokażę live demo na waszym przykładowym tickecie i pokażę, jak by to wyglądało u was. Bez slajdów, bez sprzedaży.
+      - link "hello@sliwka.studio" [ref=e397] [cursor=pointer]:
+        - /url: mailto:hello@sliwka.studio
+        - text: hello@sliwka.studio
+        - generic [ref=e398]: →
+      - generic [ref=e399]:
+        - generic [ref=e400]:
+          - generic [ref=e401]: ODPOWIADAM
+          - generic [ref=e402]: < 24 godz
+        - generic [ref=e403]:
+          - generic [ref=e404]: PIERWSZA ROZMOWA
+          - generic [ref=e405]: bezpłatna
+        - generic [ref=e406]:
+          - generic [ref=e407]: POC
+          - generic [ref=e408]: 2 tygodnie
+  - contentinfo [ref=e409]:
+    - generic [ref=e412]:
+      - generic [ref=e413]:
+        - generic [ref=e415]: sliwka
+        - generic [ref=e416]: .studio
+      - generic [ref=e417]: © 2026

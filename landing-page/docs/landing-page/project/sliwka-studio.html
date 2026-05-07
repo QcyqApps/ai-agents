@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>sliwka.studio — Claude Code dla zespołów</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600&family=Geist:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<style>
+  :root{
+    --bg: #f6f3ee;
+    --bg-2: #efeae1;
+    --ink: #1a1714;
+    --ink-2: #4a4540;
+    --ink-3: #8a847d;
+    --line: rgba(26,23,20,.12);
+    --line-2: rgba(26,23,20,.06);
+    --plum: #5a2a4a;
+    --plum-2: #8b3d6f;
+    --plum-soft: #efe1ea;
+    --accent: #c2603a;
+    --green: #3f6b4a;
+    --paper: #fdfbf7;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);
+    font-family:'Geist','Inter',system-ui,sans-serif;font-size:16px;line-height:1.5;
+    -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+  body{overflow-x:hidden}
+  .serif{font-family:'Instrument Serif',serif;font-weight:400;letter-spacing:-.01em}
+  .mono{font-family:'JetBrains Mono',ui-monospace,monospace}
+  a{color:inherit;text-decoration:none}
+  .container{max-width:1280px;margin:0 auto;padding:0 32px}
+  @media(max-width:720px){.container{padding:0 20px}}
+  .eyebrow{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--ink-3)}
+  .rule{height:1px;background:var(--line);width:100%}
+  button{font:inherit;cursor:pointer}
+  .portfolio-card{overflow:hidden}
+  @media(max-width:760px){
+    .portfolio-card{grid-template-columns:1fr !important}
+    .portfolio-card .case-visual{min-height:auto !important; padding:24px !important}
+    .portfolio-card .case-visual-top{display:flex !important; align-items:center !important; gap:16px !important; justify-content:space-between !important}
+    .portfolio-card .case-tag{margin-top:0 !important; width:64px !important; height:64px !important; font-size:18px !important; box-shadow:none !important}
+    .portfolio-card .case-client{margin-top:20px !important; padding-top:20px !important; border-top:1px solid var(--line) !important}
+  }
+  /* Mobile flow controls — stack and hide secondary status */
+  @media(max-width: 760px){
+    .flow-controls{flex-direction:column !important; align-items:stretch !important}
+    .flow-controls > button{justify-content:center; margin-left:0 !important}
+    .flow-status{display:none !important}
+    .flow-edge-fade{display:none !important}
+  }
+  /* Section padding — tighten globally so sections don't have huge gaps */
+  section[id="flow"], section[id="package"], section[id="work"], section[id="about"]{
+    padding-top:80px !important; padding-bottom:80px !important;
+  }
+  section[id="contact"]{ padding-top:100px !important; padding-bottom:100px !important; }
+  @media(max-width: 760px){
+    section[id="flow"], section[id="package"], section[id="work"], section[id="about"]{
+      padding-top:56px !important; padding-bottom:56px !important;
+    }
+    section[id="contact"]{ padding-top:64px !important; padding-bottom:64px !important; }
+  }
+  /* selection */
+  ::selection{background:var(--plum);color:var(--paper)}
+
+  /* ───── Mobile responsive overrides ───── */
+  @media(max-width: 760px){
+    /* Hero: stack vertically, shrink heading */
+    .hero-grid{grid-template-columns:1fr !important; gap:40px !important}
+    .hero-stats{flex-wrap:wrap !important; gap:24px !important; margin-top:36px !important}
+    .hero-stats > div{max-width:48% !important}
+    /* Generic two-col grids → single column */
+    .two-col{grid-template-columns:1fr !important; gap:32px !important}
+    /* Flow split: stack narrative above panels, allow horizontal scroll for panels */
+    .flow-split-grid{grid-template-columns:1fr !important; gap:28px !important}
+    /* Section padding */
+    section{padding-left:0 !important; padding-right:0 !important}
+    .section-pad{padding-top:64px !important; padding-bottom:64px !important}
+    /* Nav: hide secondary links, keep brand + cta */
+    .nav-links{display:none !important}
+    /* Portfolio cards: full width */
+    .portfolio-grid{grid-template-columns:1fr !important}
+    /* Package cards: stack */
+    .package-grid{grid-template-columns:1fr !important}
+    /* Headings shrink */
+    h1{font-size:clamp(40px, 11vw, 56px) !important}
+    h2{font-size:clamp(32px, 8vw, 44px) !important}
+    /* Buttons wrap */
+    .cta-row{flex-direction:column !important; align-items:stretch !important}
+    .cta-row > a{justify-content:center !important; text-align:center}
+  }
+</style>
+</head>
+<body>
+
+<div id="root"></div>
+
+<script type="text/babel" src="tweaks-panel.jsx"></script>
+<script type="text/babel" src="components/nav.jsx"></script>
+<script type="text/babel" src="components/hero.jsx"></script>
+<script type="text/babel" src="components/flow-terminal.jsx"></script>
+<script type="text/babel" src="components/flow-split.jsx"></script>
+<script type="text/babel" src="components/flow-section.jsx"></script>
+<script type="text/babel" src="components/package.jsx"></script>
+<script type="text/babel" src="components/portfolio.jsx"></script>
+<script type="text/babel" src="components/about.jsx"></script>
+<script type="text/babel" src="components/cta.jsx"></script>
+<script type="text/babel" src="components/footer.jsx"></script>
+<script type="text/babel" src="app.jsx"></script>
+
+</body>
+</html>

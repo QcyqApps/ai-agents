@@ -1,0 +1,236 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - navigation [ref=e3]:
+      - link "sliwka.studio" [ref=e4] [cursor=pointer]:
+        - /url: "#"
+      - list [ref=e5]:
+        - listitem [ref=e6]:
+          - link "Projekty" [ref=e7] [cursor=pointer]:
+            - /url: "#projects"
+        - listitem [ref=e8]:
+          - link "Usługi" [ref=e9] [cursor=pointer]:
+            - /url: "#services"
+        - listitem [ref=e10]:
+          - link "O mnie" [ref=e11] [cursor=pointer]:
+            - /url: "#about"
+        - listitem [ref=e12]:
+          - link "Kontakt" [ref=e13] [cursor=pointer]:
+            - /url: "#contact"
+      - button "Menu" [ref=e14] [cursor=pointer]
+  - main [ref=e18]:
+    - generic [ref=e20]:
+      - heading "Adrian Śliwka" [level=1] [ref=e21]
+      - generic [ref=e22]:
+        - link "O mnie" [ref=e23] [cursor=pointer]:
+          - /url: "#about"
+        - link "Anthropic API Certified" [ref=e25] [cursor=pointer]:
+          - /url: https://verify.skilljar.com/c/d997mdyzd6g2
+          - img [ref=e26]
+          - generic [ref=e29]: Anthropic API Certified
+      - paragraph [ref=e30]: Buduję agentów AI i automatyzacje, które pracują za Ciebie
+      - paragraph [ref=e31]: Twój zespół traci godziny na powtarzalne zadania — odpowiadanie na te same pytania, ręczne przetwarzanie danych, pilnowanie statusów. Buduję rozwiązania AI, które przejmują te obowiązki. Dla e-commerce, usług i każdej firmy, która chce osiągać więcej przy mniejszym nakładzie pracy.
+      - generic [ref=e32]:
+        - link "Zobacz projekty" [ref=e33] [cursor=pointer]:
+          - /url: "#projects"
+        - link "Porozmawiajmy" [ref=e34] [cursor=pointer]:
+          - /url: "#contact"
+    - generic [ref=e36]:
+      - heading "Brzmi znajomo?" [level=2] [ref=e37]
+      - generic [ref=e38]:
+        - generic [ref=e39]:
+          - img [ref=e41]
+          - heading "Twój zespół odpowiada na te same pytania dzień w dzień" [level=3] [ref=e43]
+          - paragraph [ref=e44]: Klienci pytają o status zamówienia, cennik, dostępność — a Twój zespół traci na to godziny zamiast zajmować się tym, co naprawdę ważne.
+        - generic [ref=e45]:
+          - img [ref=e47]
+          - heading "Ręcznie przetwarzacie dane, które mogłyby płynąć same" [level=3] [ref=e49]
+          - paragraph [ref=e50]: Kopiowanie z maila do systemu, aktualizowanie Excela, generowanie raportów — to wszystko da się zautomatyzować.
+        - generic [ref=e51]:
+          - img [ref=e53]
+          - heading "Klienci czekają, bo nikt nie odpisuje po godzinach" [level=3] [ref=e56]
+          - paragraph [ref=e57]: Twoja konkurencja odpowiada w 30 sekund. Ty odpowiadasz rano następnego dnia. Tracisz leady i klientów.
+        - generic [ref=e58]:
+          - img [ref=e60]
+          - heading "Chciałbyś skalować, ale nie chcesz zatrudniać kolejnych osób do powtarzalnej pracy" [level=3] [ref=e65]
+          - paragraph [ref=e66]: Agent AI pracuje 24/7, nie bierze urlopów i obsługuje 100 rozmów jednocześnie.
+    - generic [ref=e68]:
+      - heading "Projekty" [level=2] [ref=e69]
+      - generic [ref=e70]:
+        - article [ref=e71]:
+          - generic [ref=e74]: Custom OCR — grafika wkrótce
+          - generic [ref=e75]:
+            - heading "Custom OCR — odczyt polskich formularzy" [level=3] [ref=e76]
+            - paragraph [ref=e77]: Model wizyjny (oparty na TrOCR) rozpoznający odręczne numery telefonów z formularzy w języku polskim. Wytrenowany na ponad 100 000 dokumentów. Wdrożony produkcyjnie w dużej firmie e-commerce.
+            - list [ref=e78]:
+              - listitem [ref=e79]: Rozpoznawanie pisma odręcznego
+              - listitem [ref=e80]: "Specjalizacja: polskie formularze"
+              - listitem [ref=e81]: Trening na 100k+ dokumentów
+              - listitem [ref=e82]: Wdrożenie produkcyjne
+            - generic [ref=e83]:
+              - generic [ref=e84]: Computer Vision
+              - generic [ref=e85]: Custom Model
+              - generic [ref=e86]: Production
+              - generic [ref=e87]: E-commerce
+        - article [ref=e88]:
+          - button "Agent Obsługi Klienta E-commerce - widok czatu" [ref=e90] [cursor=pointer]:
+            - img "Agent Obsługi Klienta E-commerce - widok czatu" [ref=e91]
+            - img [ref=e93]
+          - generic [ref=e96]:
+            - heading "Agent Obsługi Klienta E-commerce" [level=3] [ref=e97]
+            - paragraph [ref=e98]: Inteligentny asystent czatowy dla sklepów internetowych. Odpowiada na pytania klientów, sprawdza statusy zamówień, pomaga w zwrotach — 24/7, bez udziału człowieka.
+            - list [ref=e99]:
+              - listitem [ref=e100]: Sprawdzanie statusu zamówień
+              - listitem [ref=e101]: Tracking przesyłek
+              - listitem [ref=e102]: Obsługa zwrotów
+              - listitem [ref=e103]: Eskalacja do człowieka
+            - generic [ref=e104]:
+              - generic [ref=e105]: Działa 24/7
+              - generic [ref=e106]: Integracja z Twoim sklepem
+              - generic [ref=e107]: Eskalacja do człowieka
+              - generic [ref=e108]: Bez kodowania
+        - article [ref=e109]:
+          - button "Koly – Asystent Biznesowy - dashboard" [ref=e111] [cursor=pointer]:
+            - img "Koly – Asystent Biznesowy - dashboard" [ref=e112]
+            - img [ref=e114]
+          - generic [ref=e117]:
+            - heading "Koly – Asystent Biznesowy" [level=3] [ref=e118]
+            - paragraph [ref=e119]: Aplikacja dla freelancerów i małych firm usługowych. Śledzi przychody, koszty i podatki w czasie rzeczywistym. AI analizuje dane i podpowiada jak zwiększyć zyski.
+            - list [ref=e120]:
+              - listitem [ref=e121]: Dashboard z live kalkulacją netto
+              - listitem [ref=e122]: Automatyczne obliczanie ryczałtu i ZUS
+              - listitem [ref=e123]: Chat AI do analizy biznesowej
+              - listitem [ref=e124]: Symulator cen usług
+            - generic [ref=e125]:
+              - generic [ref=e126]: Podatki na bieżąco
+              - generic [ref=e127]: Analiza AI
+              - generic [ref=e128]: Symulacje cenowe
+              - generic [ref=e129]: Prosty interfejs
+        - article [ref=e130]:
+          - generic [ref=e133]:
+            - generic [ref=e134]: Wkrótce
+            - heading "Nowy projekt" [level=3] [ref=e135]
+            - paragraph [ref=e136]: W przygotowaniu
+    - generic [ref=e138]:
+      - heading "Co mogę dla Ciebie zbudować" [level=2] [ref=e139]
+      - generic [ref=e140]:
+        - generic [ref=e141]:
+          - img [ref=e143]
+          - generic [ref=e146]:
+            - heading "Agenci AI — Twój nowy pracownik, który nie śpi" [level=3] [ref=e147]
+            - paragraph [ref=e148]: Inteligentny asystent, który rozmawia z Twoimi klientami, odpowiada na pytania, zbiera leady i rozwiązuje problemy — na czacie, mailu lub w dowolnym kanale. Podpięty pod Twoje dane, więc zna ofertę, statusy i historię. Działa 24/7. Gdy napotka złożony problem — przekazuje sprawę człowiekowi.
+            - generic [ref=e149]:
+              - paragraph [ref=e150]: "Przykłady zastosowań:"
+              - list [ref=e151]:
+                - listitem [ref=e152]: Obsługa klienta w sklepie internetowym
+                - listitem [ref=e153]: Zbieranie i kwalifikacja leadów na stronie usługowej
+                - listitem [ref=e154]: Asystent wewnętrzny dla zespołu (odpowiedzi na pytania o procedury, dokumenty, onboarding)
+                - listitem [ref=e155]: Wsparcie pacjentów w klinice (rejestracja, FAQ, przypomnienia)
+        - generic [ref=e156]:
+          - img [ref=e158]
+          - generic [ref=e161]:
+            - heading "Automatyzacje — koniec z powtarzalną pracą" [level=3] [ref=e162]
+            - paragraph [ref=e163]: Jeśli Twój zespół wykonuje powtarzalne czynności — przekształcam je w automatyczny proces. Dane przepływają same, raporty generują się same, powiadomienia wysyłają się same. Zespół może skupić się na tym, co wymaga kreatywności i decyzji.
+            - generic [ref=e164]:
+              - paragraph [ref=e165]: "Przykłady zastosowań:"
+              - list [ref=e166]:
+                - listitem [ref=e167]: Automatyczne przetwarzanie zamówień i synchronizacja między systemami
+                - listitem [ref=e168]: Generowanie raportów dziennych/tygodniowych bez udziału człowieka
+                - listitem [ref=e169]: Powiadomienia i alerty (nowe zamówienie, niski stan, niezapłacona faktura)
+                - listitem [ref=e170]: Automatyzacja obiegu dokumentów — faktury, umowy, formularze
+                - listitem [ref=e171]: Tworzenie opisów produktów i treści marketingowych z pomocą AI
+        - generic [ref=e172]:
+          - img [ref=e174]
+          - generic [ref=e179]:
+            - heading "Integracje — wszystko połączone w jedno" [level=3] [ref=e180]
+            - paragraph [ref=e181]: Twoje narzędzia nie komunikują się ze sobą? Sklep nie widzi magazynu, CRM nie wie o nowym kliencie, a dane są kopiowane ręcznie z systemu do systemu. Integruję to w spójną całość — żeby informacja przepływała automatycznie tam, gdzie jest potrzebna.
+            - generic [ref=e182]:
+              - paragraph [ref=e183]: "Przykłady zastosowań:"
+              - list [ref=e184]:
+                - listitem [ref=e185]: Sklep ↔ magazyn ↔ kurier ↔ księgowość — jeden przepływ
+                - listitem [ref=e186]: CRM połączony z formularzem na stronie i mailingiem
+                - listitem [ref=e187]: Synchronizacja danych między dowolnymi systemami i API
+                - listitem [ref=e188]: Własne integracje tam, gdzie gotowe wtyczki nie wystarczają
+    - generic [ref=e190]:
+      - heading "Jak wygląda współpraca?" [level=2] [ref=e191]
+      - generic [ref=e192]:
+        - generic [ref=e193]:
+          - generic [ref=e194]: "1"
+          - heading "Rozmowa" [level=3] [ref=e195]
+          - paragraph [ref=e196]: Opowiadasz mi o swoim biznesie i wyzwaniach, z którymi się mierzysz. Razem ustalamy czy AI faktycznie rozwiąże Twój problem — a nie czy brzmi atrakcyjnie. Bezpłatnie, bez zobowiązań.
+        - generic [ref=e197]:
+          - generic [ref=e198]: "2"
+          - heading "Plan i wycena" [level=3] [ref=e199]
+          - paragraph [ref=e200]: Dostajesz konkretną propozycję — co zbuduję, jak to będzie działać i ile to kosztuje. Bez technicznego żargonu, w zrozumiałym języku.
+        - generic [ref=e201]:
+          - generic [ref=e202]: "3"
+          - heading "Budowa" [level=3] [ref=e203]
+          - paragraph [ref=e204]: Buduję rozwiązanie etapami. Widzisz postępy na bieżąco, dajesz feedback, korygujemy kurs jeśli trzeba.
+        - generic [ref=e205]:
+          - generic [ref=e206]: "4"
+          - heading "Wdrożenie i wsparcie" [level=3] [ref=e207]
+          - paragraph [ref=e208]: Uruchamiam system u Ciebie. Uczę Twój zespół jak z tego korzystać. 30 dni wsparcia w cenie — żebyś miał pewność, że wszystko działa.
+    - generic [ref=e210]:
+      - heading "O mnie" [level=2] [ref=e211]
+      - generic [ref=e212]:
+        - paragraph [ref=e213]: 10 lat w branży. Znam duże systemy e-commerce — projektowałem architektury, budowałem integracje z dziesiątkami zewnętrznych serwisów, rozwiązywałem problemy które kosztowały firmy realne pieniądze.
+        - paragraph [ref=e214]: Dziś łączę to doświadczenie z AI. E-commerce to mój fundament, ale rozwiązania które buduję działają w każdej branży — bo powtarzalne procesy, chaos w danych i brak czasu to problemy uniwersalne.
+        - paragraph [ref=e215]: Nie sprzedaję technologii dla samej technologii. Jeśli AI nie rozwiąże Twojego problemu — powiem Ci to wprost.
+    - generic [ref=e217]:
+      - heading "Dla kogo to jest" [level=2] [ref=e218]
+      - generic [ref=e219]:
+        - generic [ref=e220]:
+          - img [ref=e222]
+          - generic [ref=e226]:
+            - strong [ref=e227]: Sklepy internetowe
+            - text: — które chcą obsługiwać klientów szybciej i taniej
+        - generic [ref=e228]:
+          - img [ref=e230]
+          - generic [ref=e233]:
+            - strong [ref=e234]: Firmy usługowe
+            - text: — które tracą leady bo nie odpisują na czas
+        - generic [ref=e235]:
+          - img [ref=e237]
+          - generic [ref=e242]:
+            - strong [ref=e243]: Małe i średnie firmy
+            - text: — które chcą rosnąć bez zatrudniania do powtarzalnej pracy
+        - generic [ref=e244]:
+          - img [ref=e246]
+          - generic [ref=e248]:
+            - strong [ref=e249]: Startupy i SaaS
+            - text: — które potrzebują automatyzacji od dnia pierwszego
+        - generic [ref=e250]:
+          - img [ref=e252]
+          - generic [ref=e255]:
+            - strong [ref=e256]: Każdy, kto ma powtarzalny proces
+            - text: — i chciałby żeby robił się sam
+    - generic [ref=e258]:
+      - heading "Masz problem, który chcesz rozwiązać?" [level=2] [ref=e259]
+      - paragraph [ref=e260]: Opisz wyzwanie, z którym się mierzysz — odezwę się w ciągu 24 godzin. Pierwsza rozmowa jest bezpłatna.
+      - generic [ref=e261]:
+        - generic [ref=e262]:
+          - generic [ref=e263]: Imię
+          - textbox "Imię" [ref=e264]:
+            - /placeholder: Twoje imię
+        - generic [ref=e265]:
+          - generic [ref=e266]: Email
+          - textbox "Email" [ref=e267]:
+            - /placeholder: twoj@email.pl
+        - generic [ref=e268]:
+          - generic [ref=e269]: Wiadomość
+          - textbox "Wiadomość" [ref=e270]:
+            - /placeholder: Opisz swój problem lub pomysł...
+        - button "Wyślij wiadomość" [ref=e271] [cursor=pointer]:
+          - generic [ref=e272]: Wyślij wiadomość
+      - generic [ref=e273]:
+        - paragraph [ref=e274]: "Lub napisz bezpośrednio:"
+        - generic [ref=e275]:
+          - link "a.sliwka92@gmail.com" [ref=e276] [cursor=pointer]:
+            - /url: mailto:a.sliwka92@gmail.com
+            - img [ref=e277]
+            - text: a.sliwka92@gmail.com
+          - link "LinkedIn" [ref=e280] [cursor=pointer]:
+            - /url: https://www.linkedin.com/in/adrian-sliwka-700279147/
+            - img [ref=e281]
+            - text: LinkedIn
+  - contentinfo [ref=e285]:
+    - paragraph [ref=e287]: © 2026 Adrian Śliwka. Wszystkie prawa zastrzeżone.

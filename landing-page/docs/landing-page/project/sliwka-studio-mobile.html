@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>sliwka.studio — desktop vs mobile</title>
+<style>
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:#1a1714;color:#f6f3ee;
+    font-family:-apple-system,'Inter',system-ui,sans-serif;min-height:100vh}
+  .stage{padding:40px 24px;display:flex;flex-direction:column;align-items:center;gap:32px}
+  .header{text-align:center;max-width:760px}
+  .header h1{font-family:'Instrument Serif',Georgia,serif;font-size:34px;margin:0 0 10px;
+    font-weight:400;letter-spacing:-.01em}
+  .header p{margin:0;color:#a8a39c;font-size:14px}
+  .row{display:flex;gap:48px;align-items:flex-start;flex-wrap:wrap;justify-content:center}
+  .pane{display:flex;flex-direction:column;gap:14px;align-items:center}
+  .pane-label{font-family:'JetBrains Mono',ui-monospace,monospace;font-size:11px;
+    letter-spacing:.14em;text-transform:uppercase;color:#8a847d}
+  .desktop-frame{width:1280px;max-width:90vw;height:800px;border-radius:14px;overflow:hidden;
+    background:#000;box-shadow:0 40px 80px rgba(0,0,0,.5),0 0 0 1px rgba(255,255,255,.06)}
+  .desktop-frame iframe{width:100%;height:100%;border:0;display:block}
+  .device-wrap{transform:scale(.92);transform-origin:top center}
+  .meta{font-family:'JetBrains Mono',monospace;font-size:11px;color:#6e6862;letter-spacing:.06em}
+  a.link{color:#c2603a;text-decoration:none;border-bottom:1px solid currentColor}
+  .controls{display:flex;gap:8px;margin-bottom:8px}
+  .controls button{font:inherit;font-family:'JetBrains Mono',monospace;font-size:11px;
+    padding:6px 12px;background:rgba(255,255,255,.06);color:#f6f3ee;border:1px solid rgba(255,255,255,.1);
+    border-radius:999px;cursor:pointer;letter-spacing:.06em}
+  .controls button.active{background:#c2603a;border-color:#c2603a;color:#1a1714}
+  @media(max-width:1400px){
+    .desktop-frame{width:900px;height:600px}
+  }
+</style>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script type="text/babel" src="ios-frame.jsx"></script>
+</head>
+<body>
+<div class="stage">
+  <div class="header">
+    <h1>Widok desktop ↔ mobile</h1>
+    <p>Strona obok siebie: desktop (1280px) i iPhone (402×874). Obie ramki ładują tę samą stronę — <a class="link" href="sliwka-studio.html">sliwka-studio.html</a> — różnice wynikają z breakpointów CSS.</p>
+  </div>
+
+  <div id="root"></div>
+</div>
+
+<script type="text/babel">
+  const SECTIONS = [
+    { id:'top',       label:'Hero' },
+    { id:'flow',      label:'Flow' },
+    { id:'package',   label:'Pakiet' },
+    { id:'portfolio', label:'Portfolio' },
+    { id:'about',     label:'O mnie' },
+    { id:'contact',   label:'CTA' },
+  ];
+
+  function App(){
+    const [section, setSection] = React.useState('top');
+    const desktopRef = React.useRef(null);
+    const mobileRef  = React.useRef(null);
+
+    const goTo = (id)=>{
+      setSection(id);
+      [desktopRef, mobileRef].forEach(ref=>{
+        const win = ref.current && ref.current.contentWindow;
+        if(!win) return;
+        try{
+          const el = win.document.getElementById(id);
+          if(el) win.scrollTo({ top: el.offsetTop, behavior:'smooth' });
+        }catch(e){}
+      });
+    };
+
+    return (
+      <>
+        <div className="controls">
+          {SECTIONS.map(s=>(
+            <button key={s.id}
+              className={section===s.id ? 'active' : ''}
+              onClick={()=>goTo(s.id)}>{s.label}</button>
+          ))}
+        </div>
+
+        <div className="row">
+          <div className="pane">
+            <div className="pane-label">Desktop · 1280 px</div>
+            <div className="desktop-frame">
+              <iframe ref={desktopRef} src="sliwka-studio.html" title="desktop" />
+            </div>
+            <div className="meta">macOS · Chrome / Safari</div>
+          </div>
+
+          <div className="pane">
+            <div className="pane-label">Mobile · iPhone 16</div>
+            <div className="device-wrap">
+              <IOSDevice width={402} height={874}>
+                <div style={{height:'100%', overflow:'hidden'}}>
+                  <iframe ref={mobileRef} src="sliwka-studio.html" title="mobile"
+                    style={{width:'100%',height:'100%',border:0,display:'block'}} />
+                </div>
+              </IOSDevice>
+            </div>
+            <div className="meta">iOS · Safari</div>
+          </div>
+        </div>
+      </>
+    );
+  }
+
+  // Wait for IOSDevice to be available
+  function mount(){
+    if(!window.IOSDevice){ return setTimeout(mount, 50); }
+    ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+  }
+  mount();
+</script>
+</body>
+</html>
